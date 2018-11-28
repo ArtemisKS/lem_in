@@ -3,24 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/24 19:20:45 by akupriia          #+#    #+#             */
-/*   Updated: 2017/10/24 19:20:46 by akupriia         ###   ########.fr       */
+/*   Created: 2017/11/01 19:04:35 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2017/11/01 19:04:36 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *str, int sym)
+char	*ft_strchr(const char *s, int c)
 {
-	while (*str)
+	char	ch;
+	int		i;
+
+	ch = c;
+	i = 0;
+	while (s[i] != '\0')
 	{
-		if (*str == sym)
-			return ((char*)str);
-		str++;
+		if (s[i] == ch)
+			return ((char*)(&s[i]));
+		i++;
 	}
-	if (*str == sym)
-		return ((char*)str);
-	return (NULL);
+	if (c == '\0')
+		return ((char*)(&s[i]));
+	else
+		return (NULL);
 }

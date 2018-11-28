@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   read_validate.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:51:22 by akupriia          #+#    #+#             */
-/*   Updated: 2018/06/03 19:51:23 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-static int		room_correct_2(char ***name, t_vertex *tv)
+static int		room_correct_2(char ***name, t_room *tv)
 {
 	int i;
 	int j;
@@ -40,7 +40,7 @@ static int		room_correct_2(char ***name, t_vertex *tv)
 	return (1);
 }
 
-int				room_correct(char *line, char ***name, t_vertex *tv)
+int				room_correct(char *line, char ***name, t_room *tv)
 {
 	int check;
 	int check1;
@@ -69,7 +69,7 @@ int				room_correct(char *line, char ***name, t_vertex *tv)
 	return (1);
 }
 
-static int		link_correct_cycle(char ***name, t_vertex *tv, t_vertex *tmp)
+static int		link_correct_cycle(char ***name, t_room *tv, t_room *tmp)
 {
 	int j;
 	int fl;
@@ -96,10 +96,10 @@ static int		link_correct_cycle(char ***name, t_vertex *tv, t_vertex *tmp)
 	return (1);
 }
 
-int				link_correct(char *line, char ***name, t_vertex *tv)
+int				link_correct(char *line, char ***name, t_room *tv)
 {
 	int			check;
-	t_vertex	*tmp;
+	t_room	*tmp;
 	int			i;
 
 	check = 0;
@@ -118,12 +118,12 @@ int				link_correct(char *line, char ***name, t_vertex *tv)
 	return (1);
 }
 
-int				room_exception(char *line, int *start, int *end, int *fl)
+int				room_exception(char *line, int *beg, int *end, int *fl)
 {
-	if (!ft_strcmp(line, "##start") && !(*start))
+	if (!ft_strcmp(line, "##beg") && !(*beg))
 	{
 		*fl = 1;
-		*start = 1;
+		*beg = 1;
 		return (1);
 	}
 	else if (!ft_strcmp(line, "##end") && !(*end))
@@ -133,7 +133,7 @@ int				room_exception(char *line, int *start, int *end, int *fl)
 		return (1);
 	}
 	else if (((!ft_strcmp(line, "##end")) ||
-		(!ft_strcmp(line, "##start"))) && ((*end) || (*start)))
+		(!ft_strcmp(line, "##beg"))) && ((*end) || (*beg)))
 		ft_error(7);
 	else if (line && line[0] == '#')
 		return (1);

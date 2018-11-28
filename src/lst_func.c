@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   lst_func.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 20:13:22 by akupriia          #+#    #+#             */
-/*   Updated: 2018/05/03 20:13:23 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void	ft_vpush(t_vertex **alst, t_vertex *new)
+void	ft_vpush(t_room **alst, t_room *new)
 {
-	t_vertex *tl;
+	t_room *tl;
 
 	tl = NULL;
 	if (alst && new)
@@ -73,7 +73,7 @@ void	ft_qadd(t_queue **alst, t_queue *new)
 	}
 }
 
-t_queue	*add_queue(t_vertex *tv, t_queue *tq)
+t_queue	*add_queue(t_room *tv, t_queue *tq)
 {
 	t_queue *tmp;
 

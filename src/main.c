@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 21:14:50 by akupriia          #+#    #+#             */
-/*   Updated: 2018/05/07 21:14:51 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int			int_value(char *line)
 	return (1);
 }
 
-t_way		*alg_and_sth_else(t_vertex *tv)
+t_way		*alg_and_sth_else(t_room *tv)
 {
 	int		i;
 	t_way	*tmp;
@@ -54,14 +54,14 @@ t_way		*alg_and_sth_else(t_vertex *tv)
 			tw = tmp;
 		else
 			ft_wpush(&tw, tmp);
-		if (!i && start_end_connected(tv))
+		if (!i && beg_end_connected(tv))
 			break ;
 		tmp = tmp->next;
 		i++;
 	}
-	while (tv->start != 1)
+	while (tv->beg != 1)
 		tv = tv->next;
-	tv->busy = 1;
+	tv->occupied = 1;
 	return (tw);
 }
 
@@ -85,7 +85,7 @@ t_ant		**ants_init(t_lemin *tl, t_way *tw)
 	while (tw)
 	{
 		i++;
-		tw->busy = 0;
+		tw->occupied = 0;
 		tw = tw->next;
 	}
 	tw = tmp;
@@ -117,7 +117,7 @@ int			main(int ac, char **av)
 {
 	t_lemin		*tl;
 	t_way		*tw;
-	t_vertex	*tv;
+	t_room	*tv;
 	t_ant		**ant_arr;
 
 	tl = make_lemin();

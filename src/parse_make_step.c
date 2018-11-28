@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   parse_make_step.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 20:04:11 by akupriia          #+#    #+#             */
-/*   Updated: 2018/06/03 20:04:12 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void		make_step(t_lemin *tl, t_ant **ant_arr, t_vertex *tv)
+void		make_step(t_lemin *tl, t_ant **ant_arr, t_room *tv)
 {
-	t_vertex	*t;
+	t_room	*t;
 	int			ant_id;
 
 	ant_id = 0;
 	t = tv;
 	while (ant_id < tl->ant_num && ant_can_go(tl, ant_arr[ant_id], tv))
 	{
-		if ((ant_arr[ant_id]->room)->start != -1)
+		if ((ant_arr[ant_id]->room)->beg != -1)
 		{
 			make_step_thing(tl, ant_arr, tv, ant_id);
 			output_ants(tl, ant_arr, ant_id);
@@ -32,27 +32,27 @@ void		make_step(t_lemin *tl, t_ant **ant_arr, t_vertex *tv)
 	ft_printf("\n");
 }
 
-int			start_end_present(t_vertex *tv)
+int			beg_end_present(t_room *tv)
 {
-	t_vertex *tmp;
+	t_room *tmp;
 
 	tmp = tv;
-	while (tv->next && tv->start != 1)
+	while (tv->next && tv->beg != 1)
 		tv = tv->next;
-	if (!tv->kids[0])
+	if (!tv->links[0])
 		return (0);
-	if (!(tv->next) && tv->start != 1)
+	if (!(tv->next) && tv->beg != 1)
 		return (0);
 	tv = tmp;
-	while (tv->next && tv->start != -1)
+	while (tv->next && tv->beg != -1)
 		tv = tv->next;
-	if (!tv->kids[0])
+	if (!tv->links[0])
 		return (0);
-	if (!(tv->next) && tv->start != -1)
+	if (!(tv->next) && tv->beg != -1)
 		return (0);
 	tv = tmp;
 	bfs(tv);
-	while (tv->start != -1)
+	while (tv->beg != -1)
 		tv = tv->next;
 	if (!(tv->dist))
 		return (0);
@@ -60,10 +60,10 @@ int			start_end_present(t_vertex *tv)
 	return (1);
 }
 
-void		print_ways(t_vertex *tv, t_way *tw, t_lemin *tl)
+void		print_ways(t_room *tv, t_way *tw, t_lemin *tl)
 {
 	int			i;
-	t_vertex	*tmp;
+	t_room	*tmp;
 
 	tmp = tv;
 	ft_printf("{GREEN}Paths:{RESET}\n");
@@ -89,19 +89,19 @@ void		print_ways(t_vertex *tv, t_way *tw, t_lemin *tl)
 	ft_printf("\n");
 }
 
-int			start_end_connected(t_vertex *tv)
+int			beg_end_connected(t_room *tv)
 {
-	while (tv && tv->start != -1)
+	while (tv && tv->beg != -1)
 		tv = tv->next;
-	if (tv && tv->parent && (tv->parent)->start == 1)
+	if (tv && tv->father && (tv->father)->beg == 1)
 		return (1);
 	return (0);
 }
 
-t_vertex	*parsing(t_lemin *tl)
+t_room	*parsing(t_lemin *tl)
 {
 	char			*line;
-	t_vertex		*tv;
+	t_room		*tv;
 	int				i;
 
 	tv = NULL;
@@ -117,7 +117,7 @@ t_vertex	*parsing(t_lemin *tl)
 			ft_error(1);
 		if (!(tv = read_rooms(line, tl)))
 			ft_error(9);
-		if (!(start_end_present(tv)))
+		if (!(beg_end_present(tv)))
 			ft_error(8);
 		break ;
 	}

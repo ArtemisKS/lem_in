@@ -3,52 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/09/25 16:36:15 by akupriia          #+#    #+#             */
-/*   Updated: 2017/09/25 16:36:16 by akupriia         ###   ########.fr       */
+/*   Created: 2017/11/20 19:34:40 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2017/11/20 19:34:56 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-static int	cycle(const char *str, int i, unsigned long int a, int b)
-{
-	while ((str[i] > 47 && str[i] < 58))
-	{
-		if ((a > 922337203685477580 ||
-			(a == 922337203685477580 && str[i] - 48 > 7)) && b == 1)
-			return (-1);
-		else if ((a > 922337203685477580 ||
-			(a == 922337203685477580 && str[i] - 48 > 8)) && b == -1)
-			return (0);
-		a *= 10;
-		a += (str[i] - 48);
-		i++;
-	}
-	return (a * b);
-}
+#include "libft.h"
 
-int			ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
-	int					i;
-	unsigned long int	a;
-	int					b;
+	int			i;
+	long long	res;
+	int			flag;
 
-	a = 0;
-	b = 1;
-	i = 0;
-	while (str[i] == '\n' || str[i] == '\t'
-		|| str[i] == '\r' || str[i] == '\v'
-		|| str[i] == '\f' || str[i] == ' ')
+	i = -1;
+	res = 0;
+	flag = -1;
+	while (str[i + 1] == ' ' || (str[i + 1] > 8 && str[i + 1] < 14))
 		i++;
-	if (str[i] == '-')
+	if (str[i + 1] == '-' || str[i + 1] == '+')
 	{
-		b = -1;
 		i++;
+		if (str[i] == '-')
+			flag = 0;
 	}
-	else if (str[i] == '+')
-		i++;
-	if (!(str[i] > 47 && str[i] < 58))
-		return (0);
-	a = cycle(str, i, a, b);
-	return (a);
+	while (str[++i] > 47 && str[i] < 58)
+	{
+		if (res <= MAX / 10 && (MAX - res * 10 - (str[i] - 48)) >= 0)
+			res = res * 10 + (str[i] - 48);
+		else
+			return (flag);
+	}
+	if (flag == 0)
+		return ((int)(-1 * res));
+	return ((int)res);
 }

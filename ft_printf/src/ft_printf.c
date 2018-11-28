@@ -3,100 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/26 20:51:06 by akupriia          #+#    #+#             */
-/*   Updated: 2017/12/26 20:51:07 by akupriia         ###   ########.fr       */
+/*   Created: 2018/05/23 20:17:50 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/10/26 01:20:36 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-#include <stdio.h>
+#include <ft_printf.h>
 
-int			color_func(const char **colors, char *s, int *fl)
+size_t	ft_parse(char *ft, size_t i, t_res *res, size_t j)
 {
-	int i;
+	t_elem	*prs;
 
-	i = 0;
-	while (colors[i])
+	prs = ft_memalloc(sizeof(t_elem));
+	ft_bzero(prs, sizeof(*prs));
+	(i - j + 1 > res->size - res->l) ? ft_realloc_t_res(res, i - j) : 1;
+	ft_strncpy(&(res->sym[res->l]), &ft[j], i - j);
+	res->l = res->l + i - j;
+	while (ft[++i] != '\0' && ft[i] != '%' &&
+	!(ft_isalpha(ft[i]) && !(ft[i] == 'l' || ft[i] == 'h' || ft[i] == 'z' ||
+	ft[i] == 'L' || ft[i] == 'j' || ft[i] == 't')))
 	{
-		if (ft_strstr_start(s, colors[i]))
-		{
-			*fl = 1;
+		j = i;
+		i = ft_pars_flg_and_size(ft, i, prs);
+		i = ft_pars_wd_and_acc(ft, i, prs, res);
+		if (i < j)
 			break ;
-		}
-		i++;
 	}
+	(i >= j) ? prs->type = ft[i] : prs->type;
+	(ft[i] != '\0') ? i++ : i;
+	prs->type = (prs->type == 's' && prs->sz[5] == 1) ? 'S' : prs->type;
+	prs->type = (prs->type == 'c' && prs->sz[5] == 1) ? 'C' : prs->type;
+	if ((ft_isalpha(prs->type) || prs->type == '%'))
+		ft_get_data(prs, res, i);
+	ft_memdel((void**)(&prs));
 	return (i);
 }
 
-char		*check_for_colors(char *fmt, int *fl, int ind)
+int		ft_printf(const char *format, ...)
 {
-	const char	*colors[] = {"{RED}", "{RESET}", "{BROWN}", "{LRED}",
-	"{GREEN}", "{YELLOW}", "{BLUE}", "{MAGENTA}", "{CYAN}", "{WHITE}", NULL};
-	const char	*col[] = {"\033[31;1m", "\033[0m", "\033[22;33m",
-	"\033[01;31m", "\033[32;1m", "\033[33;1m", "\033[01;34m",
-	"\033[35;1m", "\033[36;1m", "\033[37;1m", NULL};
-	char		*s;
-	int			i;
+	size_t		i;
+	size_t		j;
+	t_res		res;
 
-	s = &fmt[ind];
-	i = color_func(colors, s, fl);
-	if (*fl)
-	{
-		s += ft_strlen(colors[i]);
-		write(1, col[i], ft_strlen(col[i]));
-		fmt = s;
-	}
-	return (fmt);
-}
-
-static int	do_cycle(va_list ap, char **fmt, int *i, t_spec *ts)
-{
-	static int	j = 0;
-	int			fl;
-
-	fl = 0;
-	*fmt = check_for_colors(*fmt, &fl, *i);
-	if (fl)
-		*i = 0;
-	if ((*fmt)[*i] == '%' && (*fmt)[*i + 1])
-	{
-		(*i)++;
-		*i += parse_spec(&((*fmt)[*i]), ts, ap);
-		j = output_fstring(ap, (*fmt)[*i], j, ts);
-	}
-	else if ((*fmt)[*i] != '%')
-	{
-		write(1, &((*fmt)[*i]), 1);
-		j++;
-	}
-	(*i)++;
-	return (j);
-}
-
-int			parse_format(va_list ap, char *fmt)
-{
-	int		i;
-	int		j;
-	t_spec	*ts;
-
+	ft_bzero(&res, sizeof(res));
+	va_start(res.ap, format);
 	i = 0;
 	j = 0;
-	ts = (t_spec *)malloc(sizeof(t_spec));
-	while (fmt[i])
-		j = do_cycle(ap, &fmt, &i, ts);
-	ft_memdel((void**)&ts);
-	return (j);
-}
-
-int			ft_printf(char *fmt, ...)
-{
-	va_list	ap;
-	int		n;
-
-	va_start(ap, fmt);
-	n = parse_format(ap, fmt);
-	va_end(ap);
-	return (n);
+	res.size = 2048;
+	res.sym = ft_strnew(2048);
+	va_copy(res.list, res.ap);
+	while (format[i] != '\0')
+		if (format[i++] == '%')
+		{
+			i = ft_parse((char*)(format), i - 1, &res, j);
+			j = i;
+			res.l = res.l + ft_strlen(&(res.sym[res.l]));
+		}
+	(i - j > res.size - res.l) ? ft_realloc_t_res(&res, i - j) : 1;
+	ft_strncpy(&(res.sym[res.l]), &format[j], i - j);
+	res.l = res.l + i - j;
+	i = write(1, res.sym, res.l);
+	va_end(res.ap);
+	ft_strdel(&(res.sym));
+	return (i);
 }

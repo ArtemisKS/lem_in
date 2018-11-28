@@ -3,30 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnequ.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/27 16:20:25 by akupriia          #+#    #+#             */
-/*   Updated: 2017/10/27 16:20:25 by akupriia         ###   ########.fr       */
+/*   Created: 2017/11/14 13:42:41 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2017/11/14 13:42:41 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strnequ(char const *s1, char const *s2, size_t n)
+int		ft_strnequ(char const *s1, char const *s2, size_t n)
 {
 	size_t i;
 
-	i = 0;
-	if (!s1 || !s2)
-		return (0);
-	if (n == 0)
-		return (1);
-	while (*s1 == *s2 && (*s1 != '\0' || *s2 != '\0') && i++ < n - 1)
+	if (s1 && s2 && n > 0)
 	{
-		s1++;
-		s2++;
+		i = 0;
+		while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i] && i < n)
+			i++;
+		if ((i < n && (s1[i] - s2[i] == 0)) ||
+			(i == n && (s1[i - 1] - s2[i - 1] == 0)))
+			return (1);
+		else
+			return (0);
 	}
-	if (*s1 == *s2)
+	else if ((!s1 ^ !s2) && n > 0)
+		return (0);
+	else
 		return (1);
-	return (0);
 }

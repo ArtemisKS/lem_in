@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/02 19:59:37 by akupriia          #+#    #+#             */
-/*   Updated: 2017/11/02 19:59:38 by akupriia         ###   ########.fr       */
+/*   Created: 2017/11/13 17:05:12 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2017/11/13 17:05:14 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,27 @@
 
 void	ft_putnbr_fd(int n, int fd)
 {
-	unsigned int u_n;
+	int	buf;
+	int r;
 
-	u_n = n;
+	r = 1;
+	buf = n;
+	while (buf > 9 || buf < -9)
+	{
+		buf = buf / 10;
+		r = r * 10;
+	}
 	if (n < 0)
 	{
 		ft_putchar_fd('-', fd);
-		u_n *= (-1);
+		ft_putchar_fd(-1 * (n / r) + 48, fd);
+		n = -1 * (n % r);
+		r = r / 10;
 	}
-	if (u_n > 9)
+	while (r > 0)
 	{
-		ft_putnbr_fd(u_n / 10, fd);
+		ft_putchar_fd(n / r + 48, fd);
+		n = n % r;
+		r = r / 10;
 	}
-	ft_putchar_fd(u_n % 10 + '0', fd);
 }

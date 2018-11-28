@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/08 17:47:58 by akupriia          #+#    #+#             */
-/*   Updated: 2017/11/08 17:47:59 by akupriia         ###   ########.fr       */
+/*   Created: 2017/11/17 14:34:57 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2017/11/17 14:35:00 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,28 @@
 
 t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
-	t_list *new;
-	t_list *tmp;
-	t_list *res;
+	t_list *nlst;
+	t_list *buf;
 
-	if (!lst || !f)
+	if (!lst)
 		return (NULL);
-	tmp = f(lst);
-	if (!(new = ft_lstnew(tmp->content, tmp->content_size)))
+	nlst = (t_list*)malloc(sizeof(t_list));
+	if (!f || !nlst)
 		return (NULL);
-	res = new;
-	if (lst->next)
-		lst = lst->next;
-	while (lst)
+	nlst = f(lst);
+	buf = nlst;
+	while (lst->next)
 	{
-		tmp = f(lst);
-		if (!(new->next = ft_lstnew(tmp->content, tmp->content_size)))
+		nlst->next = (t_list*)malloc(sizeof(t_list));
+		if (!nlst->next)
+		{
+			ft_lstdel(&buf, &ft_delcont);
 			return (NULL);
-		new = new->next;
+		}
+		nlst->next = f(lst->next);
+		nlst = nlst->next;
 		lst = lst->next;
 	}
-	return (res);
+	nlst->next = NULL;
+	return (buf);
 }

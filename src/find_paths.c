@@ -3,32 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   find_paths.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 18:36:29 by akupriia          #+#    #+#             */
-/*   Updated: 2018/05/08 18:36:30 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int		kids_visited(t_vertex *tv)
+int		links_marked(t_room *tv)
 {
 	int i;
 
 	i = 0;
-	while (tv->kids[i])
+	while (tv->links[i])
 	{
-		if (!tv->kids[i]->visited && !tv->kids[i]->taken)
+		if (!tv->links[i]->marked && !tv->links[i]->used)
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-void	recalc_dist(t_vertex *tv)
+void	recalc_dist(t_room *tv)
 {
-	t_vertex	*tmp;
+	t_room	*tmp;
 	int			i;
 
 	while (tv)
@@ -37,7 +37,7 @@ void	recalc_dist(t_vertex *tv)
 		i = 0;
 		while (tv)
 		{
-			tv = tv->parent;
+			tv = tv->father;
 			i++;
 		}
 		tv = tmp;
@@ -46,31 +46,31 @@ void	recalc_dist(t_vertex *tv)
 	}
 }
 
-t_way	*find_path(t_vertex *tv)
+t_way	*find_path(t_room *tv)
 {
 	t_way		*tw;
-	t_vertex	*tmp;
+	t_room	*tmp;
 	int			i;
 
 	i = 0;
 	tw = (t_way *)malloc(sizeof(t_way));
 	recalc_dist(tv);
 	tmp = tv;
-	while (tv && tv->start != -1)
+	while (tv && tv->beg != -1)
 		tv = tv->next;
 	tw->way = (int *)malloc(sizeof(int) * tv->dist);
 	tw->dist = tv->dist;
 	while (tv)
 	{
 		tw->way[i++] = tv->id;
-		tv = tv->parent;
-		if (tv && tv->parent)
-			tv->taken = 1;
+		tv = tv->father;
+		if (tv && tv->father)
+			tv->used = 1;
 	}
 	tw->ant_num = 0;
 	tw->next = NULL;
 	tv = tmp;
-	if (!(start_end_connected(tv)))
+	if (!(beg_end_connected(tv)))
 		null_vertex(tv);
 	return (tw);
 }
@@ -102,7 +102,7 @@ int		str_arr_remalloc(t_lemin *tl)
 
 int		antsnum_exception(char *line)
 {
-	if (!ft_strcmp(line, "##start"))
+	if (!ft_strcmp(line, "##beg"))
 		ft_error(3);
 	if (!ft_strcmp(line, "##end"))
 		ft_error(3);

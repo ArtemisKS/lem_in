@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   rooms_links.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:54:15 by akupriia          #+#    #+#             */
-/*   Updated: 2018/06/03 19:54:16 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-t_vertex		*add_room(char **name, t_vertex *node, int fl)
+t_room		*add_room(char **name, t_room *node, int fl)
 {
-	t_vertex	*tv;
+	t_room	*tv;
 	static int	i = 0;
 
 	tv = make_struct();
@@ -24,11 +24,11 @@ t_vertex		*add_room(char **name, t_vertex *node, int fl)
 	free_arr((void **)name);
 	tv->id = i + 1;
 	if (!fl)
-		tv->start = -1;
+		tv->beg = -1;
 	else if (fl == 1)
-		tv->start = 1;
+		tv->beg = 1;
 	else
-		tv->start = 0;
+		tv->beg = 0;
 	if (!i)
 		node = tv;
 	else
@@ -37,7 +37,7 @@ t_vertex		*add_room(char **name, t_vertex *node, int fl)
 	return (node);
 }
 
-int				do_links(char **name, t_vertex *node, char *line, t_lemin *tl)
+int				do_links(char **name, t_room *node, char *line, t_lemin *tl)
 {
 	int				i;
 
@@ -57,20 +57,20 @@ int				do_links(char **name, t_vertex *node, char *line, t_lemin *tl)
 	return (1);
 }
 
-t_vertex		*read_rooms(char *line, t_lemin *tl)
+t_room		*read_rooms(char *line, t_lemin *tl)
 {
 	static int		fl = -1;
-	static t_vertex	*node = NULL;
+	static t_room	*node = NULL;
 	char			**name;
-	static int		start = 0;
+	static int		beg = 0;
 	static int		end = 0;
 
 	while (get_next_line(tl->fd, &line) > 0 && str_arr_remalloc(tl))
 	{
 		tl->print[tl->it++] = line;
-		if (room_exception(line, &start, &end, &fl) == 1)
+		if (room_exception(line, &beg, &end, &fl) == 1)
 			continue;
-		else if (!room_exception(line, &start, &end, &fl))
+		else if (!room_exception(line, &beg, &end, &fl))
 			break ;
 		if (room_correct(line, &name, node))
 			node = add_room(name, node, fl);
@@ -81,10 +81,10 @@ t_vertex		*read_rooms(char *line, t_lemin *tl)
 	return (node);
 }
 
-void			form_links(t_vertex *tv, char **link)
+void			form_links(t_room *tv, char **link)
 {
-	t_vertex	*kid;
-	t_vertex	*tmp;
+	t_room	*kid;
+	t_room	*tmp;
 
 	kid = tv;
 	tmp = tv;
@@ -97,15 +97,15 @@ void			form_links(t_vertex *tv, char **link)
 		tv = tv->next;
 	while (ft_strcmp(link[1], kid->name))
 		kid = kid->next;
-	tv->kids[tv->kids_num++] = kid;
-	tv->kids[tv->kids_num] = NULL;
-	kid->kids[kid->kids_num++] = tv;
-	kid->kids[kid->kids_num] = NULL;
+	tv->links[tv->n_links++] = kid;
+	tv->links[tv->n_links] = NULL;
+	kid->links[kid->n_links++] = tv;
+	kid->links[kid->n_links] = NULL;
 	tv = tmp;
 	free_arr((void **)link);
 }
 
-void			read_links(char *line, t_lemin *tl, t_vertex *tv)
+void			read_links(char *line, t_lemin *tl, t_room *tv)
 {
 	char	**link;
 	int		i;

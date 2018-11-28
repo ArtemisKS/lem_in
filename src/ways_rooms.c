@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ways_rooms.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:55:28 by akupriia          #+#    #+#             */
-/*   Updated: 2018/06/03 19:55:28 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int			linked_with_end(t_vertex *tv)
+int			linked_with_end(t_room *tv)
 {
-	t_vertex *tmp;
+	t_room *tmp;
 
 	tmp = tv;
-	while (tv && tv->start != -1)
+	while (tv && tv->beg != -1)
 		tv = tv->next;
 	if (!(tv->dist))
 	{
 		tv = tmp;
 		bfs(tv);
-		while (tv && tv->start != -1)
+		while (tv && tv->beg != -1)
 			tv = tv->next;
 		if (tv->dist)
 			return (1);
@@ -33,16 +33,16 @@ int			linked_with_end(t_vertex *tv)
 
 int			assign_ways_sth(t_lemin *tl, t_way **tw)
 {
-	if (tl->ant_num - tl->gone_ants >= (*tw)->dist - 1 && !((*tw)->busy))
+	if (tl->ant_num - tl->gone_ants >= (*tw)->dist - 1 && !((*tw)->occupied))
 	{
-		(*tw)->busy = 1;
+		(*tw)->occupied = 1;
 		return (0);
 	}
 	if (((*tw)->next)->dist - (*tw)->dist <= tl->ant_num - tl->gone_ants
-		&& (*tw)->busy && !(((*tw)->next)->busy))
+		&& (*tw)->occupied && !(((*tw)->next)->occupied))
 	{
 		(*tw) = (*tw)->next;
-		(*tw)->busy = 1;
+		(*tw)->occupied = 1;
 		return (0);
 	}
 	return (1);
@@ -51,16 +51,16 @@ int			assign_ways_sth(t_lemin *tl, t_way **tw)
 int			assign_ways_thing(t_lemin *tl, t_way **tw, t_way *tmp)
 {
 	if ((!((*tw)->next)) &&
-		(tl->ant_num - tl->gone_ants < (*tw)->dist - 1 || (*tw)->busy))
+		(tl->ant_num - tl->gone_ants < (*tw)->dist - 1 || (*tw)->occupied))
 	{
 		(*tw) = tmp;
 		while ((*tw) && tl->ant_num - tl->gone_ants >= (*tw)->dist - 1)
 		{
-			(*tw)->busy = 0;
+			(*tw)->occupied = 0;
 			(*tw) = (*tw)->next;
 		}
 		(*tw) = tmp;
-		(*tw)->busy = 1;
+		(*tw)->occupied = 1;
 		return (0);
 	}
 	if (!assign_ways_sth(tl, tw))
@@ -89,12 +89,12 @@ void		assign_ways(t_lemin *tl, t_ant **ant_arr, t_way *tw)
 	}
 }
 
-t_vertex	*make_rooms(t_way *tw, t_vertex *tv)
+t_room	*make_rooms(t_way *tw, t_room *tv)
 {
 	int			i;
-	t_vertex	*res;
-	t_vertex	*tmp;
-	t_vertex	*t;
+	t_room	*res;
+	t_room	*tmp;
+	t_room	*t;
 
 	tmp = tv;
 	res = copy_kid(tv);

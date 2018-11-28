@@ -3,94 +3,86 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/12 10:30:25 by akupriia          #+#    #+#             */
-/*   Updated: 2018/06/03 21:06:00 by akupriia         ###   ########.fr       */
+/*   Created: 2017/12/26 16:48:25 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/24 17:42:49 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list		*ft_makelst(t_list *list, void const *content, size_t content_size)
+static t_list	*list_find_fd(size_t fd, t_list *tl)
 {
-	t_list	*t;
-	size_t	len;
+	t_list	*tmp;
 
-	len = ft_strlen(content);
-	if (!list)
+	if (!tl)
+		if ((tl = ft_lstnew("", fd)))
+		{
+			tl->next = tl;
+			return (tl);
+		}
+	tmp = tl->next;
+	while (tmp->content_size != fd && tl->content_size != tmp->content_size)
+		tmp = tmp->next;
+	if (tl->content_size == tmp->content_size && tmp->content_size != fd)
 	{
-		list = (t_list *)malloc(sizeof(t_list));
-		if (!(list->content = malloc(len + 1)))
-			return (NULL);
-		ft_memcpy((list->content), content, len);
-		list->content_size = content_size;
-		list->next = list;
+		tmp = tl->next;
+		if ((tl->next = ft_lstnew("", fd)))
+		{
+			tl = tl->next;
+			tl->next = tmp;
+			tmp = tl;
+		}
+	}
+	return (tmp);
+}
+
+static int		rdfile(t_list *tl, char **tmp)
+{
+	int		num;
+	char	*buff;
+
+	if (tl->content)
+		*tmp = ft_strchr(tl->content, '\n');
+	buff = ft_strnew(BUFF_SIZE);
+	while (!(*tmp) && (num = read((int)(tl->content_size), buff, BUFF_SIZE))
+	> 0)
+	{
+		*tmp = tl->content;
+		tl->content = ft_strjoin((tl)->content, buff);
+		ft_memdel((void**)(tmp));
+		ft_strclr(buff);
+		*tmp = ft_strchr(tl->content, '\n');
+	}
+	ft_memdel((void**)(&buff));
+	return (num);
+}
+
+int				get_next_line(const int fd, char **line)
+{
+	static t_list	*tl;
+	char			*tmp;
+
+	tmp = NULL;
+	if (fd < 0 || !line || BUFF_SIZE < 1 ||
+		rdfile((tl = list_find_fd(fd, tl)), &tmp) < 0)
+		return (-1);
+	if (!tl->content || *((char*)(tl->content)) == '\0')
+	{
+		ft_memdel(&(tl->content));
+		return (0);
+	}
+	if (tmp)
+	{
+		*line = ft_strsub(tl->content, 0, ft_strlen(tl->content) -
+			ft_strlen(tmp));
+		tmp = ft_strsub(tl->content,
+			(int)(ft_strlen(*line) + 1), ft_strlen(tmp + 1));
 	}
 	else
-	{
-		t = list->next;
-		list->next = ft_makelst(NULL, content, content_size);
-		list = list->next;
-		list->next = t;
-	}
-	return (list);
-}
-
-static int	read_buf(const int fd, char **line, t_list *tl)
-{
-	char	*t;
-	char	*s;
-	int		var;
-
-	if (!((s = ft_strchr(tl->content, '\n'))))
-		s = ft_strchr(tl->content,
-			((char *)tl->content)[ft_strlen(tl->content)]);
-	t = tl->content;
-	tl->content = ft_strsub((char*)tl->content,
-		(s - (char*)tl->content) + 1,
-		ft_strlen(tl->content) - (s - (char*)tl->content));
-	ft_strdel(&t);
-	while ((var = read(fd, *line, BUFF_SIZE)) && var != -1)
-	{
-		t = *line;
-		*line = ft_strsub(*line, 0, var);
-		ft_strdel(&t);
-		t = tl->content;
-		tl->content = ft_strjoin((char*)tl->content, *line);
-		ft_strdel(&t);
-		if (ft_strchr(tl->content, '\n'))
-			break ;
-	}
-	ft_strdel(line);
-	return (var);
-}
-
-int			get_next_line(const int fd, char **line)
-{
-	char				*s;
-	static t_list		*tl;
-	int					var;
-	t_list				*t;
-
-	if (!line || !(*line = ft_strnew((BUFF_SIZE))) || read(fd, 0, 0) < 0)
-		return (-1);
-	t = tl;
-	while (tl && tl->content_size != (size_t)fd)
-	{
-		tl = tl->next;
-		if (t->content_size == tl->content_size)
-			break ;
-	}
-	if (!tl || tl->content_size != (size_t)fd)
-		tl = ft_makelst(tl, *line, fd);
-	if ((var = read_buf(fd, line, tl)) == -1)
-		return (-1);
-	if (!((s = ft_strchr(tl->content, '\n'))))
-		s = ft_strchr(tl->content,
-			((char *)tl->content)[ft_strlen(tl->content)]);
-	*line = ft_strsub((char*)tl->content, 0, s - (char*)tl->content);
-	if (!((char *)tl->content)[0] && !var)
-		return (0);
+		*line = ft_strdup(tl->content);
+	ft_memdel(&(tl->content));
+	tl->content = tmp;
 	return (1);
 }

@@ -3,60 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/28 18:59:28 by akupriia          #+#    #+#             */
-/*   Updated: 2017/10/28 18:59:29 by akupriia         ###   ########.fr       */
+/*   Created: 2017/11/10 13:13:26 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2017/11/10 13:13:28 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	intlen(int n)
+static size_t	getsize(int n)
 {
-	int i;
+	size_t	size;
 
-	i = 0;
+	size = 1;
 	if (n < 0)
-		i++;
-	else if (n == 0)
-		return (1);
-	while (n)
 	{
-		n /= 10;
-		i++;
+		size++;
+		n = n / (-10);
+		if (n > 0)
+			size++;
 	}
-	return (i);
+	while (n > 9)
+	{
+		n = n / 10;
+		size++;
+	}
+	return (size);
 }
 
-static void	ft_putnum(int nb, char *c, int i)
+char			*ft_itoa(int n)
 {
-	unsigned int u_nb;
+	size_t	size;
+	char	*num;
 
-	u_nb = nb;
-	if (nb < 0)
+	size = getsize(n);
+	num = ft_strnew(size);
+	if (num)
 	{
-		c[0] = '-';
-		u_nb *= (-1);
+		if (n < 0)
+		{
+			num[0] = '-';
+			size--;
+			num[size] = -1 * (n % 10) + 48;
+			n = n / (-10);
+		}
+		while (size-- > 0 && num[size] == '\0')
+		{
+			num[size] = (n % 10) + 48;
+			n = n / 10;
+		}
 	}
-	if (u_nb > 9)
-	{
-		ft_putnum(u_nb / 10, c, --i);
-	}
-	if (u_nb <= 9)
-		--i;
-	c[i] = (u_nb % 10 + '0');
-}
-
-char		*ft_itoa(int n)
-{
-	char	*res;
-	int		sz;
-
-	sz = intlen(n);
-	if (!(res = (char*)malloc(sizeof(char) * (sz + 1))))
-		return (NULL);
-	ft_putnum(n, res, sz);
-	res[sz] = '\0';
-	return (res);
+	return (num);
 }
