@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/26 20:51:06 by akupriia          #+#    #+#             */
-/*   Updated: 2017/12/26 20:51:07 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/28 23:54:52 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include <stdio.h>
 
-int			color_func(const char **colors, char *s, int *fl)
+int			colouror_func(const char **colourors, char *s, int *fl)
 {
 	int i;
 
 	i = 0;
-	while (colors[i])
+	while (colourors[i])
 	{
-		if (ft_strstr_start(s, colors[i]))
+		if (ft_strstr_start(s, colourors[i]))
 		{
 			*fl = 1;
 			break ;
@@ -30,22 +30,22 @@ int			color_func(const char **colors, char *s, int *fl)
 	return (i);
 }
 
-char		*check_for_colors(char *fmt, int *fl, int ind)
+char		*check_for_colourors(char *fmt, int *fl, int ind)
 {
-	const char	*colors[] = {"{RED}", "{RESET}", "{BROWN}", "{LRED}",
+	const char	*colourors[] = {"{RED}", "{RESET}", "{BROWN}", "{LRED}",
 	"{GREEN}", "{YELLOW}", "{BLUE}", "{MAGENTA}", "{CYAN}", "{WHITE}", NULL};
-	const char	*col[] = {"\033[31;1m", "\033[0m", "\033[22;33m",
+	const char	*colour[] = {"\033[31;1m", "\033[0m", "\033[22;33m",
 	"\033[01;31m", "\033[32;1m", "\033[33;1m", "\033[01;34m",
 	"\033[35;1m", "\033[36;1m", "\033[37;1m", NULL};
 	char		*s;
 	int			i;
 
 	s = &fmt[ind];
-	i = color_func(colors, s, fl);
+	i = colouror_func(colourors, s, fl);
 	if (*fl)
 	{
-		s += ft_strlen(colors[i]);
-		write(1, col[i], ft_strlen(col[i]));
+		s += ft_strlen(colourors[i]);
+		write(1, colour[i], ft_strlen(colour[i]));
 		fmt = s;
 	}
 	return (fmt);
@@ -57,7 +57,7 @@ static int	do_cycle(va_list ap, char **fmt, int *i, t_spec *ts)
 	int			fl;
 
 	fl = 0;
-	*fmt = check_for_colors(*fmt, &fl, *i);
+	*fmt = check_for_colourors(*fmt, &fl, *i);
 	if (fl)
 		*i = 0;
 	if ((*fmt)[*i] == '%' && (*fmt)[*i + 1])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lst_func.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 20:13:22 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/28 23:46:01 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void	ft_vpush(t_room **alst, t_room *new)
 	*alst = tl;
 }
 
-void	ft_wpush(t_way **alst, t_way *new)
+void	ft_wpush(t_path **alst, t_path *new)
 {
-	t_way *tl;
+	t_path *tl;
 
 	tl = NULL;
 	if (alst && new)
@@ -46,9 +46,9 @@ void	ft_wpush(t_way **alst, t_way *new)
 	*alst = tl;
 }
 
-void	ft_qpush(t_queue **tq, t_queue *new)
+void	ft_qpush(t_bfs **tq, t_bfs *new)
 {
-	t_queue *tl;
+	t_bfs *tl;
 
 	tl = NULL;
 	if (tq && new)
@@ -64,7 +64,7 @@ void	ft_qpush(t_queue **tq, t_queue *new)
 	*tq = tl;
 }
 
-void	ft_qadd(t_queue **alst, t_queue *new)
+void	ft_qadd(t_bfs **alst, t_bfs *new)
 {
 	if (alst && new)
 	{
@@ -73,13 +73,13 @@ void	ft_qadd(t_queue **alst, t_queue *new)
 	}
 }
 
-t_queue	*add_queue(t_room *tv, t_queue *tq)
+t_bfs	*add_queue(t_room *tv, t_bfs *tq)
 {
-	t_queue *tmp;
+	t_bfs *tmp;
 
 	if (!tq)
 	{
-		tq = (t_queue *)malloc(sizeof(t_queue));
+		tq = (t_bfs *)malloc(sizeof(t_bfs));
 		tq->tv = tv;
 		tq->next = NULL;
 	}

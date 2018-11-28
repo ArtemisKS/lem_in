@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 21:14:50 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/29 00:21:17 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ int			int_value(char *line)
 	return (1);
 }
 
-t_way		*alg_and_sth_else(t_room *tv)
+t_path		*alg_and_sth_else(t_room *tv)
 {
 	int		i;
-	t_way	*tmp;
-	t_way	*tw;
+	t_path	*tmp;
+	t_path	*tw;
 
 	i = 0;
 	tmp = NULL;
@@ -49,7 +49,7 @@ t_way		*alg_and_sth_else(t_room *tv)
 	while (!i || linked_with_end(tv))
 	{
 		tmp = find_path(tv);
-		tmp->way_num = i + 1;
+		tmp->n_path = i + 1;
 		if (!i)
 			tw = tmp;
 		else
@@ -65,17 +65,17 @@ t_way		*alg_and_sth_else(t_room *tv)
 	return (tw);
 }
 
-t_ant		**ants_init(t_lemin *tl, t_way *tw)
+t_emmet		**ants_init(t_global *tl, t_path *tw)
 {
 	int		i;
-	t_way	*tmp;
-	t_ant	**ant_arr;
+	t_path	*tmp;
+	t_emmet	**ant_arr;
 
 	i = 0;
-	ant_arr = (t_ant **)malloc(sizeof(t_ant *) * tl->ant_num);
-	while (i < tl->ant_num)
+	ant_arr = (t_emmet **)malloc(sizeof(t_emmet *) * tl->n_ants);
+	while (i < tl->n_ants)
 	{
-		ant_arr[i] = (t_ant *)malloc(sizeof(t_ant));
+		ant_arr[i] = (t_emmet *)malloc(sizeof(t_emmet));
 		ant_arr[i]->room = NULL;
 		ant_arr[i]->id = i + 1;
 		i++;
@@ -92,7 +92,7 @@ t_ant		**ants_init(t_lemin *tl, t_way *tw)
 	return (ant_arr);
 }
 
-void		do_flags(int ac, char **av, t_lemin *tl)
+void		do_flags(int ac, char **av, t_global *tl)
 {
 	int i;
 
@@ -100,11 +100,11 @@ void		do_flags(int ac, char **av, t_lemin *tl)
 	while (i < ac)
 	{
 		if (!(ft_strcmp(av[i], "-c")))
-			tl->col = 1;
+			tl->colour = 1;
 		else if (!(ft_strcmp(av[i], "-w")))
-			tl->show_ways = 1;
+			tl->disp_paths = 1;
 		else if (!(ft_strcmp(av[i], "-a")))
-			tl->show_ants = 1;
+			tl->disp_emmets = 1;
 		else if (!(ft_strcmp(av[i], "-l")))
 			tl->leaks = 1;
 		else if (!(ft_strcmp(av[i], "-e")))
@@ -115,10 +115,10 @@ void		do_flags(int ac, char **av, t_lemin *tl)
 
 int			main(int ac, char **av)
 {
-	t_lemin		*tl;
-	t_way		*tw;
+	t_global		*tl;
+	t_path		*tw;
 	t_room	*tv;
-	t_ant		**ant_arr;
+	t_emmet		**ant_arr;
 
 	tl = make_lemin();
 	do_flags(ac, av, tl);
@@ -126,11 +126,11 @@ int			main(int ac, char **av)
 	tw = alg_and_sth_else(tv);
 	ant_arr = ants_init(tl, tw);
 	assign_ways(tl, ant_arr, tw);
-	if (tl->show_ways)
-		print_ways(tv, tw, tl);
+	if (tl->disp_paths)
+		print_paths(tv, tw, tl);
 	assign_rooms(tl, ant_arr, tv);
-	tl->gone_ants = 0;
-	while (tl->gone_ants < tl->ant_num)
+	tl->n_ants_arr = 0;
+	while (tl->n_ants_arr < tl->n_ants)
 		make_step(tl, ant_arr, tv);
 	if (tl->leaks)
 		system("leaks -quiet lem-in");

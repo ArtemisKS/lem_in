@@ -3,31 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   struct_funcs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:50:08 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/29 00:22:35 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-t_lemin		*make_lemin(void)
+t_global		*make_lemin(void)
 {
-	t_lemin *tl;
+	t_global *tl;
 
-	tl = (t_lemin *)malloc(sizeof(t_lemin));
+	tl = (t_global *)malloc(sizeof(t_global));
 	tl->fd = 0;
-	tl->ant_num = 0;
-	tl->way_num = 0;
-	tl->gone_ants = 0;
-	tl->col = 0;
-	tl->show_ways = 0;
-	tl->show_ants = 0;
+	tl->n_ants = 0;
+	tl->n_path = 0;
+	tl->n_ants_arr = 0;
+	tl->colour = 0;
+	tl->disp_paths = 0;
+	tl->disp_emmets = 0;
 	tl->leaks = 0;
 	tl->ants_home = 0;
-	tl->sum = 0;
-	tl->gnl = 0;
+	tl->n_lines = 0;
+	tl->gnl_ret = 0;
 	return (tl);
 }
 
@@ -45,7 +45,7 @@ t_room	*make_struct(void)
 	tv->used = 0;
 	tv->x = 0;
 	tv->y = 0;
-	tv->dist = 0;
+	tv->distance = 0;
 	tv->n_links = 0;
 	tv->id = 0;
 	tv->beg = 0;
@@ -65,7 +65,7 @@ t_room	*copy_kid(t_room *tv)
 	res->occupied = tv->occupied;
 	res->x = tv->x;
 	res->y = tv->y;
-	res->dist = tv->dist;
+	res->distance = tv->distance;
 	res->n_links = tv->n_links;
 	res->id = tv->id;
 	res->beg = tv->beg;
@@ -87,9 +87,9 @@ void		ft_error(int n)
 	else if (n == 6)
 		ft_putendl_fd("WRONG ROOM ERROR", 2);
 	else if (n == 7)
-		ft_putendl_fd("beg OR END ERROR", 2);
+		ft_putendl_fd("START OR END ERROR", 2);
 	else if (n == 8)
-		ft_putendl_fd("NO beg OR END OR NO POSSIBLE WAY ERROR", 2);
+		ft_putendl_fd("NO START OR END OR NO POSSIBLE WAY ERROR", 2);
 	else if (n == 9)
 		ft_putendl_fd("WRONG FIRST ROOM ERROR", 2);
 	else if (n == 2)

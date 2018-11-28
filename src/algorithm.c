@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   algorithm.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 20:07:25 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/28 23:46:38 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int			check_links(t_room **tv, int dist, t_queue **tq)
+int			check_links(t_room **tv, int distance, t_bfs **tq)
 {
 	int i;
 
@@ -23,17 +23,17 @@ int			check_links(t_room **tv, int dist, t_queue **tq)
 	{
 		if (!(*tv)->links[i]->used)
 		{
-			dist = i;
+			distance = i;
 			break ;
 		}
 		i++;
 	}
-	if (!(*tv)->links[dist]->used)
+	if (!(*tv)->links[distance]->used)
 	{
-		*tq = add_queue((*tv)->links[dist], *tq);
-		(*tv)->links[dist]->marked = 1;
-		(*tv)->links[dist]->dist = 1;
-		(*tv)->links[dist]->father = (*tv);
+		*tq = add_queue((*tv)->links[distance], *tq);
+		(*tv)->links[distance]->marked = 1;
+		(*tv)->links[distance]->distance = 1;
+		(*tv)->links[distance]->father = (*tv);
 		(*tv)->marked = 1;
 	}
 	else
@@ -41,7 +41,7 @@ int			check_links(t_room **tv, int dist, t_queue **tq)
 	return (1);
 }
 
-void		bfs_algo(t_room **tv, int *dist, t_room *tmp, t_queue **tq)
+void		bfs_algo(t_room **tv, int *distance, t_room *tmp, t_bfs **tq)
 {
 	int i;
 
@@ -49,16 +49,16 @@ void		bfs_algo(t_room **tv, int *dist, t_room *tmp, t_queue **tq)
 	if ((*tv)->father && tmp->father)
 	{
 		if ((*tv)->father->id != tmp->father->id)
-			(*dist)++;
+			(*distance)++;
 	}
 	else if (!(*tv)->father || !tmp->father)
-		(*dist)++;
+		(*distance)++;
 	while ((*tv)->links[i] && i < (*tv)->n_links)
 	{
 		if (!(*tv)->links[i]->marked && !(*tv)->links[i]->used)
 		{
 			*tq = add_queue((*tv)->links[i], *tq);
-			(*tv)->links[i]->dist = *dist;
+			(*tv)->links[i]->distance = *distance;
 			(*tv)->links[i]->father = (*tv);
 			(*tv)->links[i]->marked = 1;
 		}
@@ -68,29 +68,29 @@ void		bfs_algo(t_room **tv, int *dist, t_room *tmp, t_queue **tq)
 
 void		bfs(t_room *tv)
 {
-	t_queue		*tq;
-	t_queue		*temp;
+	t_bfs		*tq;
+	t_bfs		*temp;
 	t_room	*tmp;
-	int			dist;
+	int			distance;
 
-	dist = 0;
+	distance = 0;
 	tq = NULL;
 	tmp = tv;
-	if (!check_links(&tv, dist, &tq))
+	if (!check_links(&tv, distance, &tq))
 		return ;
 	while (tq || !links_marked(tv))
 	{
-		bfs_algo(&tv, &dist, tmp, &tq);
+		bfs_algo(&tv, &distance, tmp, &tq);
 		tmp = tv;
 		if ((temp = pop_queue(&tq)))
 			tv = temp->tv;
 	}
 }
 
-t_queue		*pop_queue(t_queue **tq)
+t_bfs		*pop_queue(t_bfs **tq)
 {
-	t_queue		*res;
-	t_queue		*tmp;
+	t_bfs		*res;
+	t_bfs		*tmp;
 
 	tmp = NULL;
 	if ((*tq)->next)

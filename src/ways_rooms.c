@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ways_rooms.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:55:28 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/29 00:21:19 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,26 @@ int			linked_with_end(t_room *tv)
 	tmp = tv;
 	while (tv && tv->beg != -1)
 		tv = tv->next;
-	if (!(tv->dist))
+	if (!(tv->distance))
 	{
 		tv = tmp;
 		bfs(tv);
 		while (tv && tv->beg != -1)
 			tv = tv->next;
-		if (tv->dist)
+		if (tv->distance)
 			return (1);
 	}
 	return (0);
 }
 
-int			assign_ways_sth(t_lemin *tl, t_way **tw)
+int			assign_ways_sth(t_global *tl, t_path **tw)
 {
-	if (tl->ant_num - tl->gone_ants >= (*tw)->dist - 1 && !((*tw)->occupied))
+	if (tl->n_ants - tl->n_ants_arr >= (*tw)->distance - 1 && !((*tw)->occupied))
 	{
 		(*tw)->occupied = 1;
 		return (0);
 	}
-	if (((*tw)->next)->dist - (*tw)->dist <= tl->ant_num - tl->gone_ants
+	if (((*tw)->next)->distance - (*tw)->distance <= tl->n_ants - tl->n_ants_arr
 		&& (*tw)->occupied && !(((*tw)->next)->occupied))
 	{
 		(*tw) = (*tw)->next;
@@ -48,13 +48,13 @@ int			assign_ways_sth(t_lemin *tl, t_way **tw)
 	return (1);
 }
 
-int			assign_ways_thing(t_lemin *tl, t_way **tw, t_way *tmp)
+int			assign_ways_thing(t_global *tl, t_path **tw, t_path *tmp)
 {
 	if ((!((*tw)->next)) &&
-		(tl->ant_num - tl->gone_ants < (*tw)->dist - 1 || (*tw)->occupied))
+		(tl->n_ants - tl->n_ants_arr < (*tw)->distance - 1 || (*tw)->occupied))
 	{
 		(*tw) = tmp;
-		while ((*tw) && tl->ant_num - tl->gone_ants >= (*tw)->dist - 1)
+		while ((*tw) && tl->n_ants - tl->n_ants_arr >= (*tw)->distance - 1)
 		{
 			(*tw)->occupied = 0;
 			(*tw) = (*tw)->next;
@@ -69,27 +69,27 @@ int			assign_ways_thing(t_lemin *tl, t_way **tw, t_way *tmp)
 	return (1);
 }
 
-void		assign_ways(t_lemin *tl, t_ant **ant_arr, t_way *tw)
+void		assign_ways(t_global *tl, t_emmet **ant_arr, t_path *tw)
 {
 	int		i;
-	t_way	*tmp;
+	t_path	*tmp;
 
 	tmp = tw;
 	i = 0;
-	while (i < tl->ant_num)
+	while (i < tl->n_ants)
 	{
 		while (tw)
 			if (!assign_ways_thing(tl, &tw, tmp))
 				break ;
-		ant_arr[i]->way = tw;
-		tw->ant_num++;
-		tl->gone_ants++;
+		ant_arr[i]->path = tw;
+		tw->n_ants++;
+		tl->n_ants_arr++;
 		tw = tmp;
 		i++;
 	}
 }
 
-t_room	*make_rooms(t_way *tw, t_room *tv)
+t_room	*make_rooms(t_path *tw, t_room *tv)
 {
 	int			i;
 	t_room	*res;
@@ -98,11 +98,11 @@ t_room	*make_rooms(t_way *tw, t_room *tv)
 
 	tmp = tv;
 	res = copy_kid(tv);
-	i = tw->dist - 2;
+	i = tw->distance - 2;
 	while (i >= 0)
 	{
 		tv = tmp;
-		while (tv->next && tw->way[i] != tv->id)
+		while (tv->next && tw->path[i] != tv->id)
 			tv = tv->next;
 		t = copy_kid(tv);
 		ft_vpush(&res, t);

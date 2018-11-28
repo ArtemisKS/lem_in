@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_paths.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 18:36:29 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/29 00:22:35 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int		links_marked(t_room *tv)
 	return (1);
 }
 
-void	recalc_dist(t_room *tv)
+void	recalc_distance(t_room *tv)
 {
 	t_room	*tmp;
 	int			i;
@@ -41,33 +41,33 @@ void	recalc_dist(t_room *tv)
 			i++;
 		}
 		tv = tmp;
-		tv->dist = i;
+		tv->distance = i;
 		tv = tv->next;
 	}
 }
 
-t_way	*find_path(t_room *tv)
+t_path	*find_path(t_room *tv)
 {
-	t_way		*tw;
+	t_path		*tw;
 	t_room	*tmp;
 	int			i;
 
 	i = 0;
-	tw = (t_way *)malloc(sizeof(t_way));
-	recalc_dist(tv);
+	tw = (t_path *)malloc(sizeof(t_path));
+	recalc_distance(tv);
 	tmp = tv;
 	while (tv && tv->beg != -1)
 		tv = tv->next;
-	tw->way = (int *)malloc(sizeof(int) * tv->dist);
-	tw->dist = tv->dist;
+	tw->path = (int *)malloc(sizeof(int) * tv->distance);
+	tw->distance = tv->distance;
 	while (tv)
 	{
-		tw->way[i++] = tv->id;
+		tw->path[i++] = tv->id;
 		tv = tv->father;
 		if (tv && tv->father)
 			tv->used = 1;
 	}
-	tw->ant_num = 0;
+	tw->n_ants = 0;
 	tw->next = NULL;
 	tv = tmp;
 	if (!(beg_end_connected(tv)))
@@ -75,26 +75,26 @@ t_way	*find_path(t_room *tv)
 	return (tw);
 }
 
-int		str_arr_remalloc(t_lemin *tl)
+int		str_arr_remalloc(t_global *tl)
 {
 	static	int		iter = 1;
 	char			**printcpy;
 	int				i;
 
-	if (iter == 1 || tl->print[BUFF] != NULL)
+	if (iter == 1 || tl->map[BUFF] != NULL)
 	{
-		tl->sum = BUFF * iter;
-		printcpy = ft_memalloc(sizeof(char *) * (tl->sum + 1));
-		tl->sum -= BUFF;
+		tl->n_lines = BUFF * iter;
+		printcpy = ft_memalloc(sizeof(char *) * (tl->n_lines + 1));
+		tl->n_lines -= BUFF;
 		i = -1;
-		while (++i < tl->sum)
-			printcpy[i] = tl->print[i];
+		while (++i < tl->n_lines)
+			printcpy[i] = tl->map[i];
 		i = -1;
 		if (iter != 1)
-			free(tl->print);
+			free(tl->map);
 		else
 			tl->it = 0;
-		tl->print = printcpy;
+		tl->map = printcpy;
 		iter++;
 	}
 	return (1);
@@ -102,7 +102,7 @@ int		str_arr_remalloc(t_lemin *tl)
 
 int		antsnum_exception(char *line)
 {
-	if (!ft_strcmp(line, "##beg"))
+	if (!ft_strcmp(line, "##start"))
 		ft_error(3);
 	if (!ft_strcmp(line, "##end"))
 		ft_error(3);

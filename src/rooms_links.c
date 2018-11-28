@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rooms_links.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:54:15 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/29 00:21:17 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_room		*add_room(char **name, t_room *node, int fl)
 	return (node);
 }
 
-int				do_links(char **name, t_room *node, char *line, t_lemin *tl)
+int				do_links(char **name, t_room *node, char *line, t_global *tl)
 {
 	int				i;
 
@@ -47,8 +47,8 @@ int				do_links(char **name, t_room *node, char *line, t_lemin *tl)
 		free_arr((void **)name);
 		read_links(line, tl, node);
 		i = -1;
-		while (tl->print[++i])
-			ft_printf("%s\n", tl->print[i]);
+		while (tl->map[++i])
+			ft_printf("%s\n", tl->map[i]);
 		ft_printf("\n");
 		return (0);
 	}
@@ -57,7 +57,7 @@ int				do_links(char **name, t_room *node, char *line, t_lemin *tl)
 	return (1);
 }
 
-t_room		*read_rooms(char *line, t_lemin *tl)
+t_room		*read_rooms(char *line, t_global *tl)
 {
 	static int		fl = -1;
 	static t_room	*node = NULL;
@@ -67,7 +67,7 @@ t_room		*read_rooms(char *line, t_lemin *tl)
 
 	while (get_next_line(tl->fd, &line) > 0 && str_arr_remalloc(tl))
 	{
-		tl->print[tl->it++] = line;
+		tl->map[tl->it++] = line;
 		if (room_exception(line, &beg, &end, &fl) == 1)
 			continue;
 		else if (!room_exception(line, &beg, &end, &fl))
@@ -105,7 +105,7 @@ void			form_links(t_room *tv, char **link)
 	free_arr((void **)link);
 }
 
-void			read_links(char *line, t_lemin *tl, t_room *tv)
+void			read_links(char *line, t_global *tl, t_room *tv)
 {
 	char	**link;
 	int		i;
@@ -115,7 +115,7 @@ void			read_links(char *line, t_lemin *tl, t_room *tv)
 	while ((!i || get_next_line(tl->fd, &line) > 0) && str_arr_remalloc(tl))
 	{
 		if (i)
-			tl->print[tl->it++] = line;
+			tl->map[tl->it++] = line;
 		if (!(ft_strlen(line)))
 			break ;
 		else if (line && line[0] == '#')

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_validate.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:51:22 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/28 23:35:47 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/29 00:23:05 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int				link_correct(char *line, char ***name, t_room *tv)
 
 int				room_exception(char *line, int *beg, int *end, int *fl)
 {
-	if (!ft_strcmp(line, "##beg") && !(*beg))
+	if (!ft_strcmp(line, "##start") && !(*beg))
 	{
 		*fl = 1;
 		*beg = 1;
@@ -133,7 +133,7 @@ int				room_exception(char *line, int *beg, int *end, int *fl)
 		return (1);
 	}
 	else if (((!ft_strcmp(line, "##end")) ||
-		(!ft_strcmp(line, "##beg"))) && ((*end) || (*beg)))
+		(!ft_strcmp(line, "##start"))) && ((*end) || (*beg)))
 		ft_error(7);
 	else if (line && line[0] == '#')
 		return (1);
