@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/06 22:05:58 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/28 23:26:35 by akupriia         ###   ########.fr       */
+/*   Updated: 2018/11/29 07:05:11 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 char				*ft_strmap(char const *s, char (*f)(char));
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				*ft_strjoin(char const *s1, char const *s2);
-char				*ft_strsub(char const *s, unsigned int start, size_t len);
+char				*ft_strsub(char const *s, size_t start, size_t len);
 char				*ft_strtrim(char const *s);
 char				**ft_strsplit(char const *s, char c);
-void				ft_putstr(const char *str);
+ssize_t				ft_putstr(const char *str);
 void				ft_putchar(char c);
 void				ft_putendl(const char *str);
 void				ft_putchar_fd(char c, int fd);
-void				ft_putstr_fd(const char *str, int fd);
+ssize_t				ft_putstr_fd(const char *str, int fd);
 void				ft_putendl_fd(const char *str, int fd);
 void				ft_putnbr_fd(int n, int fd);
 void				ft_putnbr(int n);
@@ -95,5 +95,6 @@ int					ft_strnequwr(char const *s1, char const *s2, size_t n);
 char				*ft_strtrimu(char const *s, char c);
 void				ft_masdel(char ***s);
 int					get_next_line(const int fd, char **line);
+void				ft_lstdelcont(void *content, size_t content_size);
 
 #endif

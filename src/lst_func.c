@@ -5,14 +5,54 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/03 20:13:22 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/28 23:46:01 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/11/29 08:58:40 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 08:58:41 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void	ft_vpush(t_room **alst, t_room *new)
+t_bfs				*pop_queue(t_bfs **queue)
+{
+	t_bfs		*q_ret;
+	t_bfs		*queue_tmp;
+
+	q_ret = NULL;
+	if ((*queue)->next)
+	{
+		queue_tmp = *queue;
+		while ((queue_tmp->next)->next)
+			queue_tmp = queue_tmp->next;
+		q_ret = queue_tmp->next;
+		ft_memdel((void **)&queue_tmp->next);
+		queue_tmp->next = NULL;
+	}
+	else
+	{
+		q_ret = *queue;
+		ft_memdel((void **)queue);
+		*queue = NULL;
+	}
+	return (q_ret);
+}
+
+void				ft_wpush(t_path **alst, t_path *new)
+{
+	t_path *tl;
+
+	tl = NULL;
+	if (alst && new)
+	{
+		if (*alst)
+			tl = *alst;
+		while ((*alst)->next)
+			*alst = (*alst)->next;
+		(*alst)->next = new;
+	}
+	*alst = tl;
+}
+
+void				ft_vpush(t_room **alst, t_room *new)
 {
 	t_room *tl;
 
@@ -28,43 +68,7 @@ void	ft_vpush(t_room **alst, t_room *new)
 	*alst = tl;
 }
 
-void	ft_wpush(t_path **alst, t_path *new)
-{
-	t_path *tl;
-
-	tl = NULL;
-	if (alst && new)
-	{
-		if (*alst)
-			tl = *alst;
-		while ((*alst)->next)
-		{
-			*alst = (*alst)->next;
-		}
-		(*alst)->next = new;
-	}
-	*alst = tl;
-}
-
-void	ft_qpush(t_bfs **tq, t_bfs *new)
-{
-	t_bfs *tl;
-
-	tl = NULL;
-	if (tq && new)
-	{
-		if (*tq)
-			tl = *tq;
-		while ((*tq)->next)
-		{
-			*tq = (*tq)->next;
-		}
-		(*tq)->next = new;
-	}
-	*tq = tl;
-}
-
-void	ft_qadd(t_bfs **alst, t_bfs *new)
+static inline void	ft_qadd(t_bfs **alst, t_bfs *new)
 {
 	if (alst && new)
 	{
@@ -73,19 +77,19 @@ void	ft_qadd(t_bfs **alst, t_bfs *new)
 	}
 }
 
-t_bfs	*add_queue(t_room *tv, t_bfs *tq)
+t_bfs				*add_to_q(t_room *tv, t_bfs *tq)
 {
 	t_bfs *tmp;
 
 	if (!tq)
 	{
 		tq = (t_bfs *)malloc(sizeof(t_bfs));
-		tq->tv = tv;
+		tq->room = tv;
 		tq->next = NULL;
 	}
 	else
 	{
-		tmp = add_queue(tv, NULL);
+		tmp = add_to_q(tv, NULL);
 		ft_qadd(&tq, tmp);
 	}
 	return (tq);

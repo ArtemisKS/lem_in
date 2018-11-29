@@ -5,119 +5,83 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/03 20:07:25 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/28 23:46:38 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/11/29 08:58:52 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 08:58:53 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int			check_links(t_room **tv, int distance, t_bfs **tq)
+static bool		fill_queue(t_room *room, int distance, t_bfs **queue)
 {
 	int i;
 
-	i = 0;
-	while ((*tv)->beg != 1)
-		*tv = (*tv)->next;
-	while ((*tv)->links[i])
-	{
-		if (!(*tv)->links[i]->used)
+	i = -1;
+	while (room->beg != 1)
+		room = room->next;
+	while (room->links[++i])
+		if (!room->links[i]->used)
 		{
 			distance = i;
 			break ;
 		}
-		i++;
-	}
-	if (!(*tv)->links[distance]->used)
+	if (!room->links[distance]->used)
 	{
-		*tq = add_queue((*tv)->links[distance], *tq);
-		(*tv)->links[distance]->marked = 1;
-		(*tv)->links[distance]->distance = 1;
-		(*tv)->links[distance]->father = (*tv);
-		(*tv)->marked = 1;
+		*queue = add_to_q(room->links[distance], *queue);
+		room->links[distance]->father = room;
+		room->links[distance]->distance = 1;
+		room->links[distance]->marked = 1;
+		room->marked = 1;
 	}
 	else
-		return (0);
-	return (1);
+		return (false);
+	return (true);
 }
 
-void		bfs_algo(t_room **tv, int *distance, t_room *tmp, t_bfs **tq)
+static void		add_tq_assign_ind(t_room *room, int *distance, t_room *tmp,
+	t_bfs **queue)
 {
 	int i;
 
 	i = 0;
-	if ((*tv)->father && tmp->father)
+	if (room->father && tmp->father)
 	{
-		if ((*tv)->father->id != tmp->father->id)
+		if (room->father->id != tmp->father->id)
 			(*distance)++;
 	}
-	else if (!(*tv)->father || !tmp->father)
+	else if (!room->father || !tmp->father)
 		(*distance)++;
-	while ((*tv)->links[i] && i < (*tv)->n_links)
+	while (room->links[i] && i < room->n_links)
 	{
-		if (!(*tv)->links[i]->marked && !(*tv)->links[i]->used)
+		if (!room->links[i]->marked && !room->links[i]->used)
 		{
-			*tq = add_queue((*tv)->links[i], *tq);
-			(*tv)->links[i]->distance = *distance;
-			(*tv)->links[i]->father = (*tv);
-			(*tv)->links[i]->marked = 1;
+			*queue = add_to_q(room->links[i], *queue);
+			room->links[i]->distance = *distance;
+			room->links[i]->father = room;
+			room->links[i]->marked = 1;
 		}
 		i++;
 	}
 }
 
-void		bfs(t_room *tv)
+void			br_first_search(t_room *room)
 {
-	t_bfs		*tq;
-	t_bfs		*temp;
-	t_room	*tmp;
+	t_bfs		*queue;
+	t_bfs		*tmp_q;
+	t_room		*node;
 	int			distance;
 
 	distance = 0;
-	tq = NULL;
-	tmp = tv;
-	if (!check_links(&tv, distance, &tq))
+	queue = NULL;
+	node = room;
+	if (!fill_queue(room, distance, &queue))
 		return ;
-	while (tq || !links_marked(tv))
+	while (queue || !links_marked(room))
 	{
-		bfs_algo(&tv, &distance, tmp, &tq);
-		tmp = tv;
-		if ((temp = pop_queue(&tq)))
-			tv = temp->tv;
+		add_tq_assign_ind(room, &distance, node, &queue);
+		node = room;
+		if ((tmp_q = pop_queue(&queue)))
+			room = tmp_q->room;
 	}
 }
 
-t_bfs		*pop_queue(t_bfs **tq)
-{
-	t_bfs		*res;
-	t_bfs		*tmp;
-
-	tmp = NULL;
-	if ((*tq)->next)
-	{
-		res = *tq;
-		while ((res->next)->next)
-			res = res->next;
-		tmp = res->next;
-		free(res->next);
-		res->next = NULL;
-	}
-	else
-	{
-		tmp = *tq;
-		free(*tq);
-		*tq = NULL;
-	}
-	return (tmp);
-}
-
-int			room_correct_3(char ***name, t_room *tv)
-{
-	while (tv)
-	{
-		if (!(ft_strcmp(tv->name, (*name)[0])))
-			return (0);
-		tv = tv->next;
-	}
-	return (1);
-}

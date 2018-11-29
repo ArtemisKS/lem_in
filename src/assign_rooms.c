@@ -5,19 +5,19 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/03 19:57:58 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/29 04:34:35 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/11/29 08:59:01 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 09:07:18 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void		assign_rooms(t_global *tl, t_emmet **ant_arr, t_room *tv)
+void		assign_rooms(t_emmet **ant_arr, t_room *tv)
 {
 	int i;
 
 	i = 0;
-	while (i < tl->n_ants)
+	while (i < gl->n_ants)
 	{
 		ant_arr[i]->room = make_rooms(ant_arr[i]->path, tv);
 		i++;
@@ -29,22 +29,22 @@ int			ft_min(int a, int b)
 	return (a < b ? a : b);
 }
 
-int			ant_can_go(t_global *tl, t_emmet *ant, t_room *tv)
+int			ant_can_go(t_emmet *ant, t_room *tv)
 {
 	int i;
 
 	i = 0;
 	while ((ant->room)->next && ((ant->room)->next)->id != tv->id)
 		tv = tv->next;
-	if ((ant->room)->beg == -1 && ant->id < tl->n_ants)
+	if ((ant->room)->beg == -1 && ant->id < gl->n_ants)
 		return (1);
 	if ((!(ant->room)->next && (ant->room)->beg == -1
-		&& ant->id == tl->n_ants) || tv->occupied)
+		&& ant->id == gl->n_ants) || tv->occupied)
 		return (0);
 	return (1);
 }
 
-bool			n_ants_valid(char *line, t_global *gl)
+bool			n_ants_valid(char *line)
 {
 	int i;
 
@@ -58,13 +58,13 @@ bool			n_ants_valid(char *line, t_global *gl)
 	return (true);
 }
 
-void		null_vertex(t_room *tv)
+void		bzero_room(t_room *tv)
 {
 	while (tv)
 	{
-		tv->father = NULL;
-		tv->marked = 0;
 		tv->distance = 0;
+		tv->marked = 0;
+		tv->father = NULL;
 		tv = tv->next;
 	}
 }

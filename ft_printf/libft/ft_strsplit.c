@@ -3,40 +3,75 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazas <vbrazas@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/09 16:28:58 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2017/11/09 16:29:00 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2017/11/15 20:14:25 by vbrazas           #+#    #+#             */
+/*   Updated: 2017/11/16 19:39:44 by vbrazas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	**ft_strsplit(char const *s, char c)
+static	void	find_word(size_t *i, size_t *j, char const *s, char c)
 {
-	int		i;
-	int		k;
-	int		num;
-	char	**res;
+	*i = *j;
+	while (s[(*i)] == c && s[(*i)])
+		*i = *i + 1;
+	*j = *i;
+	while (s[(*j)] != c && s[(*j)])
+		*j = *j + 1;
+}
+
+static	char	**freedom(char **buf, size_t y, char ***buff)
+{
+	while (y)
+		free(buf[--y]);
+	free(buf);
+	*buff = NULL;
+	return (NULL);
+}
+
+static	char	**appropriation(char **buf, size_t wn, char const *s, char c)
+{
+	size_t	x;
+	size_t	y;
+	size_t	i;
+	size_t	j;
+
+	y = 0;
+	j = 0;
+	while (y < wn)
+	{
+		x = 0;
+		find_word(&i, &j, s, c);
+		buf[y] = (char *)malloc(sizeof(char) * (j - i + 1));
+		if (buf[y] == NULL)
+			return (freedom(buf, y, &buf));
+		while (i < j)
+			buf[y][x++] = s[i++];
+		buf[y++][x] = '\0';
+	}
+	buf[y] = NULL;
+	return (buf);
+}
+
+char			**ft_strsplit(char const *s, char c)
+{
+	char	**buf;
+	size_t	wn;
+	size_t	i;
 
 	if (!s)
 		return (NULL);
-	i = -1;
-	num = 0;
-	while (s[++i] != '\0')
-		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
-			num++;
-	if (!(res = (char**)ft_memalloc(sizeof(char*) * (num + 1))))
+	i = 0;
+	wn = 0;
+	if (s[0] != c && s[0])
+		wn++;
+	while (s[i++])
+		if (s[i - 1] == c && s[i] != c && s[i])
+			wn++;
+	buf = (char **)malloc(sizeof(char *) * (wn + 1));
+	if (buf == NULL)
 		return (NULL);
-	while (num-- > 0)
-	{
-		while (s[--i] == c && i > 0)
-			;
-		k = i;
-		while (--i > -1 && s[i] != c)
-			;
-		if (!(res[num] = ft_strsub(s, i + 1, (size_t)(k - i))))
-			ft_masdel(&res);
-	}
-	return (res);
+	return (appropriation(buf, wn, s, c));
 }

@@ -6,126 +6,124 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:54:15 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/29 04:37:00 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 07:50:54 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-t_room		*add_room(char **name, t_room *node, int fl)
+t_room		*add_room(char **room_n, t_room *node, char stend)
 {
-	t_room	*tv;
+	t_room		*room;
 	static int	i = 0;
 
-	tv = make_struct();
-	tv->name = ft_strdup(name[0]);
-	tv->x = ft_atoi(name[1]);
-	tv->y = ft_atoi(name[2]);
-	free_arr((void **)name);
-	tv->id = i + 1;
-	if (!fl)
-		tv->beg = -1;
-	else if (fl == 1)
-		tv->beg = 1;
+	room = init_room();
+	room->name = ft_strdup(room_n[0]);
+	room->x = ft_atoi(room_n[1]);
+	room->y = ft_atoi(room_n[2]);
+	room->id = i + 1;
+	if (stend == 'e')
+		room->beg = -1;
+	else if (stend == 's')
+		room->beg = 1;
 	else
-		tv->beg = 0;
+		room->beg = 0;
 	if (!i)
-		node = tv;
+		node = room;
 	else
-		ft_vpush(&node, tv);
+		ft_vpush(&node, room);
 	i++;
+	free_arr((void **)room_n);
 	return (node);
 }
 
-int				do_links(char **name, t_room *node, char *line, t_global *tl)
+bool			parse_links(char **room_n, t_room *node, char *str)
 {
 	int				i;
 
-	free_arr((void **)name);
-	if (link_correct(line, &name, node))
-	{
-		free_arr((void **)name);
-		read_links(line, tl, node);
-		i = -1;
-		while (tl->map[++i])
-			ft_printf("%s\n", tl->map[i]);
-		ft_printf("\n");
-		return (0);
+	i = -1;
+	free_arr((void **)room_n);
+	if (valid_link(str, &room_n, node))
+	{	
+		free_arr((void **)room_n);
+		process_links(str, node);
+		while (gl->map[++i])
+			ft_putendl(gl->map[i]);
+		ft_putchar('\n');
+		return (false);
 	}
 	else
 		puterr("Error: wrong room/first link");
-	return (1);
+	return (true);
 }
 
-t_room		*read_rooms(char *line, t_global *tl)
+t_room		*parse_val_rooms(char *str)
 {
-	static int		fl = -1;
+	static char		stend = 0;
 	static t_room	*node = NULL;
-	char			**name;
-	static int		beg = 0;
-	static int		end = 0;
+	char			**room_n;
+	int				hstend;
 
-	while (get_next_line(tl->fd, &line) > 0 && realloc_darr(tl))
+	while (get_next_line(gl->fd, &str) > 0 && realloc_darr(gl))
 	{
-		tl->map[tl->iter++] = line;
-		if (room_exception(line, &beg, &end, &fl) == 1)
-			continue;
-		else if (!room_exception(line, &beg, &end, &fl))
+		gl->map[gl->iter++] = str;
+		if ((hstend = handle_stend(str, &stend)) == -1)
+			continue ;
+		else if (!hstend)
 			break ;
-		if (room_correct(line, &name, node))
-			node = add_room(name, node, fl);
-		else if (!do_links(name, node, line, tl))
+		if (valid_room(str, &room_n, node))
+			node = add_room(room_n, node, stend);
+		else if (!parse_links(room_n, node, str))
 			break ;
-		fl = -1;
+		stend = 0;
 	}
 	return (node);
 }
 
-void			form_links(t_room *tv, char **link)
+void			form_links(t_room *room, char **l_arr)
 {
-	t_room	*kid;
-	t_room	*tmp;
+	t_room	*child;
+	t_room	*node;
 
-	kid = tv;
-	tmp = tv;
-	if (!(ft_strcmp(link[0], link[1])))
+	child = room;
+	node = room;
+	if (ft_strequ(l_arr[0], l_arr[1]))
 	{
-		free_arr((void **)link);
+		free_arr((void **)l_arr);
 		return ;
 	}
-	while (ft_strcmp(link[0], tv->name))
-		tv = tv->next;
-	while (ft_strcmp(link[1], kid->name))
-		kid = kid->next;
-	tv->links[tv->n_links++] = kid;
-	tv->links[tv->n_links] = NULL;
-	kid->links[kid->n_links++] = tv;
-	kid->links[kid->n_links] = NULL;
-	tv = tmp;
-	free_arr((void **)link);
+	while (!ft_strequ(l_arr[0], room->name))
+		room = room->next;
+	while (!ft_strequ(l_arr[1], child->name))
+		child = child->next;
+	room->links[room->n_links++] = child;
+	room->links[room->n_links] = NULL;
+	child->links[child->n_links++] = room;
+	child->links[child->n_links] = NULL;
+	room = node;
+	free_arr((void **)l_arr);
 }
 
-void			read_links(char *line, t_global *tl, t_room *tv)
+void			process_links(char *str, t_room *room)
 {
 	char	**link;
 	int		i;
 
 	link = NULL;
 	i = 0;
-	while ((!i || get_next_line(tl->fd, &line) > 0) && realloc_darr(tl))
+	while (!i || (get_next_line(gl->fd, &str) > 0 && realloc_darr(gl)))
 	{
-		if (i)
-			tl->map[tl->iter++] = line;
-		if (!(ft_strlen(line)))
+		(i) ? gl->map[gl->iter++] = str : NULL;
+		if (!(ft_strlen(str)))
 			break ;
-		else if (line && line[0] == '#')
+		else if (COMMENT(str))
 			continue;
-		else if (line && line[0] != 'L' && link_correct(line, &link, tv))
-			form_links(tv, link);
+		else if (N_LETTER_L(str) && valid_link(str, &link, room))
+			form_links(room, link);
 		else
 			puterr("Error: wrong link");
 		i++;
 	}
-	if (line)
-		ft_strdel(&line);
+	if (str)
+		ft_strdel(&str);
 }

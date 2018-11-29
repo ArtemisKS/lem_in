@@ -6,25 +6,25 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 20:04:11 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/29 04:37:04 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 09:15:46 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-void		make_step(t_global *gl, t_emmet **ant_arr, t_room *room)
+void		make_step(t_emmet **ant_arr, t_room *room)
 {
 	t_room	*t;
 	int			ant_id;
 
 	ant_id = 0;
 	t = room;
-	while (ant_id < gl->n_ants && ant_can_go(gl, ant_arr[ant_id], room))
+	while (ant_id < gl->n_ants && ant_can_go(ant_arr[ant_id], room))
 	{
 		if ((ant_arr[ant_id]->room)->beg != -1)
 		{
-			make_step_thing(gl, ant_arr, room, ant_id);
-			output_emmets(gl, ant_arr, ant_id);
+			make_step_thing(ant_arr, room, ant_id);
+			output_emmets(ant_arr, ant_id);
 			room = t;
 		}
 		ant_id++;
@@ -32,70 +32,69 @@ void		make_step(t_global *gl, t_emmet **ant_arr, t_room *room)
 	ft_printf("\n");
 }
 
-int			beg_end_present(t_room *room)
+bool			stend_valid(t_room *room)
 {
-	t_room *tmp;
+	t_room		*node;
+	static bool	res = true;
 
-	tmp = room;
-	while (room->next && room->beg != 1)
-		room = room->next;
-	if (!room->links[0])
-		return (0);
-	if (!(room->next) && room->beg != 1)
-		return (0);
-	room = tmp;
-	while (room->next && room->beg != -1)
-		room = room->next;
-	if (!room->links[0])
-		return (0);
-	if (!(room->next) && room->beg != -1)
-		return (0);
-	room = tmp;
-	bfs(room);
-	while (room->beg != -1)
-		room = room->next;
-	if (!(room->distance))
-		return (0);
-	room = tmp;
-	return (1);
+	node = room;
+	while (node->next && node->beg != 1)
+		node = node->next;
+	if (!node->links[0] || (!(node->next) && node->beg != 1))
+		res = false;
+	node = room;
+	while (node->next && node->beg != -1)
+		node = node->next;
+	if (!node->links[0] || (!(node->next) && node->beg != -1))
+		res = false;
+	node = room;
+	br_first_search(room);
+	while (node->beg != -1)
+		node = node->next;
+	if (!(node->distance))
+		res = false;
+	return (res);
 }
 
-void		print_paths(t_room *room, t_path *tw, t_global *gl)
+void		print_paths(t_room *room, t_path *path)
 {
 	int			i;
-	t_room		*tmp;
+	t_room		*node;
 
-	tmp = room;
-	ft_printf("{GREEN}Paths:{RESET}\n");
-	while (tw)
+	node = room;
+	ft_printf("%sPossible ways:%s\n", GREEN, RESET);
+	while (path && (i = path->distance))
 	{
-		i = tw->distance;
 		while (--i >= 0)
 		{
-			while (tw->path[i] != room->id)
+			while (path->path[i] != room->id)
 				room = room->next;
-			if (i == tw->distance - 1)
-				ft_printf("{ %s--->", room->name);
+			if (i == path->distance - 1)
+				ft_printf("[ %s%s ==> ", g_col[path->n_path % 8], room->name);
 			else if (i > 0)
-				ft_printf("%s--->", room->name);
+				ft_printf("%s ==> ", room->name);
 			else
-				ft_printf("%s }\n", room->name);
-			room = tmp;
+				ft_printf("%s%s ]\n", room->name, RESET);
+			room = node;
 		}
 		if (gl->disp_emmets)
-			ft_printf("ants_num: %d\n", tw->n_ants);
-		tw = tw->next;
+			ft_printf("ants number on da way: %s%d%s\n",
+			g_col[path->n_path % 8], path->n_ants, RESET);
+		path = path->next;
 	}
-	ft_printf("\n");
+	ft_putchar('\n');
 }
 
-int			beg_end_connected(t_room *room)
+bool		st_end_nearby(t_room *room)
 {
+	bool	res;
+
+	res = false;
 	while (room && room->beg != -1)
 		room = room->next;
 	if (room && room->father && (room->father)->beg == 1)
-		return (1);
-	return (0);
+		res = true;
+	return (res);
 }
 
 t_room		*parse_validate(t_global *gl)
@@ -109,16 +108,17 @@ t_room		*parse_validate(t_global *gl)
 	while ((gl->gnl_ret = get_next_line(gl->fd, &line)) > 0
 		&& realloc_darr(gl) && ++ind && (gl->map[gl->iter++] = line))
 	{
-		if (!check_n_emm(line, ind))
+		if (!check_n_emm(line))
 			continue ;
-		if (ind == 1 && !(n_ants_valid(line, gl)))
+		if (!(n_ants_valid(line)))
 			puterr("Error: wrong number of ants");
-		if (!(room = read_rooms(line, gl)))
-			puterr("Error: wrong first room");
-		if (!(beg_end_present(room)))
-			puterr("Error: wrong start/end, or there is no possible path");
-		break ;
+		else
+			break;
 	}
+	if (!(room = parse_val_rooms(line)))
+		puterr("Error: wrong first room");
+	if (!(stend_valid(room)))
+		puterr("Error: wrong start/end, or there is no possible path");
 	ft_strdel(&line);
 	if (gl->gnl_ret < 0 || !ind)
 		puterr("Error: invalid or empty file");

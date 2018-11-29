@@ -5,139 +5,114 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/03 19:51:22 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/29 03:59:18 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/11/29 06:03:41 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 07:50:02 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-static int		room_correct_2(char ***name, t_room *tv)
+static bool			valid_room_coord(char ***room_n, t_room *room)
 {
 	int i;
 	int j;
-
-	j = 1;
-	while ((*name)[j])
-	{
-		i = 0;
-		if (ft_strlen((*name)[j]) != 1 && (*name)[j][i] == '0')
-			return (0);
-		while ((*name)[j][i])
-			if (!(ft_isdigit((*name)[j][i++])))
-				return (0);
-		j++;
-	}
-	if (!((*name)[1]) || !((*name)[2]) ||
-		(*name)[0][ft_strlen((*name)[0]) - 1] == '-')
-		return (0);
-	while (tv)
-	{
-		if (tv->x == ft_atoi((*name)[1]) && tv->y == ft_atoi((*name)[2]))
-			return (0);
-		tv = tv->next;
-	}
-	return (1);
-}
-
-int				room_correct(char *line, char ***name, t_room *tv)
-{
-	int check;
-	int check1;
-	int i;
 
 	i = 0;
-	check = 0;
-	check1 = 0;
-	*name = ft_strsplit(line, ' ');
-	if (line[0] == '#' || line[0] == 'L')
-		return (0);
-	while (line[i])
+	while ((*room_n)[++i] && !(j = 0))
 	{
-		if (line[i] != ' ' && line[i + 1] && line[i + 1] == ' ')
-			check++;
-		if (line[i] == ' ')
-			check1++;
-		i++;
+		if (!(*room_n)[i] || ((*room_n)[i][j] == '0' && (*room_n)[i][j + 1]))
+			return (false);
+		while ((*room_n)[i][j])
+			if (!(ft_isdigit((*room_n)[i][j++])))
+				return (false);
 	}
-	if ((check != 2) || (check1 != 2) || (line[0] == ' '))
-		return (0);
-	if (!room_correct_2(name, tv))
-		return (0);
-	if (!room_correct_3(name, tv))
-		return (0);
-	return (1);
+	if ((*room_n)[0][ft_strlen((*room_n)[0]) - 1] == '-'
+		|| (*room_n)[0][0] == '-')
+		return (false);
+	while (room)
+	{
+		if ((room->x == ft_atoi((*room_n)[1]) && room->y == ft_atoi((*room_n)[2]))
+		|| (ft_strequ(room->name, (*room_n)[0])))
+			return (false);
+		room = room->next;
+	}
+	return (true);
 }
 
-static int		link_correct_cycle(char ***name, t_room *tv, t_room *tmp)
+bool				valid_room(char *str, char ***room_n, t_room *room)
 {
-	int j;
-	int fl;
+	int cnt;
+	int cnt1;
+	int i;
 
-	j = 0;
-	fl = 0;
-	while (j < 2)
+	i = -1;
+	cnt = 0;
+	cnt1 = 0;
+	*room_n = ft_strsplit(str, ' ');
+	if (str[0] == 'L' || COMMENT(str))
+		return (false);
+	while (str[++i])
+	{
+		if (str[i] != ' ' && str[i + 1] && str[i + 1] == ' ')
+			cnt++;
+		if (str[i] == ' ')
+			cnt1++;
+	}
+	if (cnt != 2 || cnt1 != 2 || !valid_room_coord(room_n, room))
+		return (false);
+	return (true);
+}
+
+static inline bool	valid_link_cycle(char ***links, t_room *room, t_room *tmp)
+{
+	int		j;
+
+	j = -1;
+	while (++j < 2)
 	{
 		while (tmp)
 		{
-			if (!(ft_strcmp(tmp->name, (*name)[j])))
-			{
-				fl = 1;
-				break ;
-			}
+			if (ft_strequ(tmp->name, (*links)[j]))
+				return (true);
 			tmp = tmp->next;
 		}
-		if (!fl)
-			return (0);
-		tmp = tv;
-		fl = 0;
-		j++;
+		tmp = room;
 	}
-	return (1);
+	return (false);
 }
 
-int				link_correct(char *line, char ***name, t_room *tv)
+bool				valid_link(char *str, char ***links, t_room *room)
 {
-	int			check;
-	t_room	*tmp;
+	int			cnt;
+	t_room		*tmp;
 	int			i;
 
-	check = 0;
-	tmp = tv;
 	i = -1;
-	*name = ft_strsplit(line, '-');
-	if (!((*name)[0]) || !((*name)[1]))
-		return (0);
-	while (line[++i])
-		if (line[i] == '-')
-			check++;
-	if (!link_correct_cycle(name, tv, tmp))
-		return (0);
-	if (line[0] == '-' || line[ft_strlen(line) - 1] == '-' || check != 1)
-		return (0);
-	return (1);
+	cnt = 0;
+	tmp = room;
+	*links = ft_strsplit(str, '-');
+	if (!(*links)[0] || !(*links)[1])
+		return (false);
+	while (str[++i])
+		if (str[i] == '-')
+			cnt++;
+	if (!valid_link_cycle(links, room, tmp) || cnt != 1)
+		return (false);
+	return (true);
 }
 
-int				room_exception(char *line, int *beg, int *end, int *fl)
+int					handle_stend(char *str, char *stend)
 {
-	if (!ft_strcmp(line, "##start") && !(*beg))
-	{
-		*fl = 1;
-		*beg = 1;
-		return (1);
-	}
-	else if (!ft_strcmp(line, "##end") && !(*end))
-	{
-		*fl = 0;
-		*end = 1;
-		return (1);
-	}
-	else if (((!ft_strcmp(line, "##end")) ||
-		(!ft_strcmp(line, "##start"))) && ((*end) || (*beg)))
+	if (ft_strequ(str, "##start") && !(gl->has_start) && (*stend = 's')
+		&& (gl->has_start = true))
+		return (-1);
+	else if (ft_strequ(str, "##end") && !(gl->has_end) && (*stend = 'e')
+		&& (gl->has_end = true))
+		return (-1);
+	else if ((ft_strequ(str, "##end") || ft_strequ(str, "##start"))
+		&& ((gl->has_end) || (gl->has_start)))
 		puterr("Error: double start/end");
-	else if (line && line[0] == '#')
-		return (1);
-	if (!(ft_strlen(line)))
-		return (0);
-	return (-1);
+	else if (COMMENT(str))
+		return (-1);
+	return (!(ft_strlen(str)) ? (0) : (1));
 }

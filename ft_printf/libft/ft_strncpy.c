@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazas <vbrazas@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/02 15:03:26 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2017/11/02 15:03:27 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2017/11/14 14:17:21 by vbrazas           #+#    #+#             */
+/*   Updated: 2017/11/19 14:54:55 by vbrazas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,28 @@
 
 char	*ft_strncpy(char *dst, const char *src, size_t len)
 {
-	size_t i;
+	char		*d;
+	const char	*s;
 
-	if (len == 0)
-		return (dst);
-	i = 0;
-	while (src[i] != '\0' && i < len)
+	if (len != 0)
 	{
-		dst[i] = src[i];
-		i++;
-	}
-	while (i < len)
-	{
-		dst[i] = '\0';
-		i++;
+		d = dst;
+		s = src;
+		if ((*d++ = *s++) == '\0')
+		{
+			while (--len != 0)
+				*d++ = '\0';
+			return (dst);
+		}
+		while (--len != 0)
+		{
+			if ((*d++ = *s++) == '\0')
+			{
+				while (--len != 0)
+					*d++ = '\0';
+				break ;
+			}
+		}
 	}
 	return (dst);
 }

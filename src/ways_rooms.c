@@ -5,106 +5,108 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/06/03 19:55:28 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/29 00:21:19 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/11/29 08:58:46 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 08:58:47 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int			linked_with_end(t_room *tv)
+bool		stend_connected(t_room *room)
 {
-	t_room *tmp;
+	t_room *node;
 
-	tmp = tv;
-	while (tv && tv->beg != -1)
-		tv = tv->next;
-	if (!(tv->distance))
+	node = room;
+	while (room && room->beg != -1)
+		room = room->next;
+	if (!(room->distance))
 	{
-		tv = tmp;
-		bfs(tv);
-		while (tv && tv->beg != -1)
-			tv = tv->next;
-		if (tv->distance)
-			return (1);
+		room = node;
+		br_first_search(room);
+		while (room && room->beg != -1)
+			room = room->next;
+		if (room->distance)
+			return (true);
 	}
-	return (0);
+	else
+		puterr("Error: some error occured");
+	return (false);
 }
 
-int			assign_ways_sth(t_global *tl, t_path **tw)
+int			assign_ways_sth(t_path **path)
 {
-	if (tl->n_ants - tl->n_ants_arr >= (*tw)->distance - 1 && !((*tw)->occupied))
+	if (gl->n_ants - gl->n_ants_arr >= (*path)->distance - 1 && !((*path)->occupied))
 	{
-		(*tw)->occupied = 1;
+		(*path)->occupied = 1;
 		return (0);
 	}
-	if (((*tw)->next)->distance - (*tw)->distance <= tl->n_ants - tl->n_ants_arr
-		&& (*tw)->occupied && !(((*tw)->next)->occupied))
+	if (((*path)->next)->distance - (*path)->distance <= gl->n_ants - gl->n_ants_arr
+		&& (*path)->occupied && !(((*path)->next)->occupied))
 	{
-		(*tw) = (*tw)->next;
-		(*tw)->occupied = 1;
+		(*path) = (*path)->next;
+		(*path)->occupied = 1;
 		return (0);
 	}
 	return (1);
 }
 
-int			assign_ways_thing(t_global *tl, t_path **tw, t_path *tmp)
+int			assign_ways_thing(t_path **path, t_path *tmp)
 {
-	if ((!((*tw)->next)) &&
-		(tl->n_ants - tl->n_ants_arr < (*tw)->distance - 1 || (*tw)->occupied))
+	if ((!((*path)->next)) &&
+		(gl->n_ants - gl->n_ants_arr < (*path)->distance - 1 || (*path)->occupied))
 	{
-		(*tw) = tmp;
-		while ((*tw) && tl->n_ants - tl->n_ants_arr >= (*tw)->distance - 1)
+		(*path) = tmp;
+		while ((*path) && gl->n_ants - gl->n_ants_arr >= (*path)->distance - 1)
 		{
-			(*tw)->occupied = 0;
-			(*tw) = (*tw)->next;
+			(*path)->occupied = 0;
+			(*path) = (*path)->next;
 		}
-		(*tw) = tmp;
-		(*tw)->occupied = 1;
+		(*path) = tmp;
+		(*path)->occupied = 1;
 		return (0);
 	}
-	if (!assign_ways_sth(tl, tw))
+	if (!assign_ways_sth(path))
 		return (0);
-	(*tw) = (*tw)->next;
+	(*path) = (*path)->next;
 	return (1);
 }
 
-void		assign_ways(t_global *tl, t_emmet **ant_arr, t_path *tw)
+void		assign_ways(t_emmet **ant_arr, t_path *path)
 {
 	int		i;
 	t_path	*tmp;
 
-	tmp = tw;
+	tmp = path;
 	i = 0;
-	while (i < tl->n_ants)
+	while (i < gl->n_ants)
 	{
-		while (tw)
-			if (!assign_ways_thing(tl, &tw, tmp))
+		while (path)
+			if (!assign_ways_thing(&path, tmp))
 				break ;
-		ant_arr[i]->path = tw;
-		tw->n_ants++;
-		tl->n_ants_arr++;
-		tw = tmp;
+		ant_arr[i]->path = path;
+		path->n_ants++;
+		gl->n_ants_arr++;
+		path = tmp;
 		i++;
 	}
 }
 
-t_room	*make_rooms(t_path *tw, t_room *tv)
+t_room	*make_rooms(t_path *path, t_room *room)
 {
 	int			i;
 	t_room	*res;
 	t_room	*tmp;
 	t_room	*t;
 
-	tmp = tv;
-	res = copy_kid(tv);
-	i = tw->distance - 2;
+	tmp = room;
+	res = copy_kid(room);
+	i = path->distance - 2;
 	while (i >= 0)
 	{
-		tv = tmp;
-		while (tv->next && tw->path[i] != tv->id)
-			tv = tv->next;
-		t = copy_kid(tv);
+		room = tmp;
+		while (room->next && path->path[i] != room->id)
+			room = room->next;
+		t = copy_kid(room);
 		ft_vpush(&res, t);
 		i--;
 	}

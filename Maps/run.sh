@@ -52,35 +52,35 @@ FILE31="err_letter_in_coordinate.map";
 FILE32="err_no_end.map";
 
 echo "\n\n\033[32m$FILE\n\033[37m"
-$C $DIR$FILE | $P > $USER$FILE | leaks lem-in;
+$C $DIR$FILE | $P > $USER$FILE | disp_leaks lem-in;
 echo "\x1b[36mOutput: cat $USER$FILE\n"
 
 echo "\n\n\033[32m$FILE1\n\033[37m"
-$C $DIR$FILE1 | $P > $USER$FILE1 | leaks lem-in;
+$C $DIR$FILE1 | $P > $USER$FILE1 | disp_leaks lem-in;
 echo "\x1b[36mOutput: cat $USER$FILE1\n"
 
 echo "\n\n\033[32m$FILE20\n\033[37m"
-$C $DIR$FILE20 | $P > $USER$FILE20 | leaks lem-in;
+$C $DIR$FILE20 | $P > $USER$FILE20 | disp_leaks lem-in;
 echo "\x1b[36mOutput: cat $USER$FILE20\n"
 
 echo "\n\n\033[32m$FILE21\n\033[37m"
-$C $DIR$FILE21 | $P > $USER$FILE21 | leaks lem-in;
+$C $DIR$FILE21 | $P > $USER$FILE21 | disp_leaks lem-in;
 echo "\x1b[36mOutput: cat $USER$FILE20\n"
 
 echo "\n\n\033[32m$FILE22\n\033[37m"
-$C $DIR$FILE22 | $P > $USER$FILE22 | leaks lem-in;
+$C $DIR$FILE22 | $P > $USER$FILE22 | disp_leaks lem-in;
 echo "\x1b[36mOutput: cat $USER$FILE22\n"
 
 echo "\n\n\033[32m$FILE23\n\033[37m"
-$C $DIR$FILE23 | $P > $USER$FILE23 | leaks lem-in;
+$C $DIR$FILE23 | $P > $USER$FILE23 | disp_leaks lem-in;
 echo "\x1b[36mOutput: cat $USER$FILE23\n"
 
 echo "\n\n\033[32m$FILE2\n\033[37m"
-$C $DIR$FILE2 | $P > $USER$FILE2 | leaks lem-in;
+$C $DIR$FILE2 | $P > $USER$FILE2 | disp_leaks lem-in;
 echo "\x1b[36mOutput: cat $USER$FILE2\n"
 
 echo "\n\n\033[32m$FILE3\n\033[37m"
-$C $DIR$FILE3 | $P > $USER$FILE3 | leaks lem-in;
+$C $DIR$FILE3 | $P > $USER$FILE3 | disp_leaks lem-in;
 echo "\x1b[36mOutput: cat $USER$FILE3\n"
 
 # echo "\n\n\033[32m$FILE4\n\033[37m"
@@ -93,87 +93,87 @@ echo "\x1b[36mOutput: cat $USER$FILE3\n"
 
 
 echo "\n\n\033[32m$FILE7\n\033[37m"
-$C $DIR$FILE7 | $P > $USER$FILE7 | leaks lem-in;
+$C $DIR$FILE7 | $P > $USER$FILE7 | disp_leaks lem-in;
 echo "\x1b[36mOutput: cat $USER$FILE7\n"
 
 echo "\n\n\033[32m$FILE8\n\033[37m"
-$C $DIR$FILE8 | $P > $USER$FILE8 | leaks lem-in;
+$C $DIR$FILE8 | $P > $USER$FILE8 | disp_leaks lem-in;
 echo "\x1b[36mOutput: cat $USER$FILE8\n"
 
 echo "\n\n\033[32m$FILE24\n\033[37m"
-$C $DIR$FILE24 | $P > $USER$FILE24 | leaks lem-in;
+$C $DIR$FILE24 | $P > $USER$FILE24 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE9\n\033[37m"
-$C $DIR$FILE9 | $P > $USER$FILE9 | leaks lem-in;
+$C $DIR$FILE9 | $P > $USER$FILE9 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE10\n\033[37m"
-$C $DIR$FILE10 | $P > $USER$FILE10 | leaks lem-in;
+$C $DIR$FILE10 | $P > $USER$FILE10 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE11\n\033[37m"
-$C $DIR$FILE11 | $P > $USER$FILE11 | leaks lem-in;
+$C $DIR$FILE11 | $P > $USER$FILE11 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE12\n\033[37m"
-$C $DIR$FILE12 | $P > $USER$FILE12 | leaks lem-in;
+$C $DIR$FILE12 | $P > $USER$FILE12 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE13\n\033[37m"
-$C $DIR$FILE13 | $P > $USER$FILE13 | leaks lem-in;
+$C $DIR$FILE13 | $P > $USER$FILE13 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE14\n\033[37m"
-$C $DIR$FILE14 | $P > $USER$FILE14 | leaks lem-in;
+$C $DIR$FILE14 | $P > $USER$FILE14 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE15\n\033[37m"
-$C $DIR$FILE15 | $P > $USER$FILE15 | leaks lem-in;
+$C $DIR$FILE15 | $P > $USER$FILE15 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE16\n\033[37m"
-$C $DIR$FILE16 | $P > $USER$FILE16 | leaks lem-in;
+$C $DIR$FILE16 | $P > $USER$FILE16 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE17\n\033[37m"
-$C $DIR$FILE17 | $P > $USER$FILE17 | leaks lem-in;
+$C $DIR$FILE17 | $P > $USER$FILE17 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE18\n\033[37m"
-$C $DIR$FILE18 | $P > $USER$FILE18 | leaks lem-in;
+$C $DIR$FILE18 | $P > $USER$FILE18 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE19\n\033[37m"
-$C $DIR$FILE19 | $P > $USER$FILE19 | leaks lem-in;
+$C $DIR$FILE19 | $P > $USER$FILE19 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE24\n\033[37m"
-$C $DIR$FILE24 | $P > $USER$FILE24 | leaks lem-in;
+$C $DIR$FILE24 | $P > $USER$FILE24 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE25\n\033[37m"
-$C $DIR$FILE25 | $P > $USER$FILE25 | leaks lem-in;
+$C $DIR$FILE25 | $P > $USER$FILE25 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE26\n\033[37m"
-$C $DIR$FILE26 | $P > $USER$FILE26 | leaks lem-in;
+$C $DIR$FILE26 | $P > $USER$FILE26 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE27\n\033[37m"
-$C $DIR$FILE27 | $P > $USER$FILE27 | leaks lem-in;
+$C $DIR$FILE27 | $P > $USER$FILE27 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE28\n\033[37m"
-$C $DIR$FILE28 | $P > $USER$FILE28 | leaks lem-in;
+$C $DIR$FILE28 | $P > $USER$FILE28 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE29\n\033[37m"
-$C $DIR$FILE29 | $P > $USER$FILE29 | leaks lem-in;
+$C $DIR$FILE29 | $P > $USER$FILE29 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE30\n\033[37m"
-$C $DIR$FILE30 | $P > $USER$FILE30 | leaks lem-in;
+$C $DIR$FILE30 | $P > $USER$FILE30 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE31\n\033[37m"
-$C $DIR$FILE31 | $P > $USER$FILE31 | leaks lem-in;
+$C $DIR$FILE31 | $P > $USER$FILE31 | disp_leaks lem-in;
 
 echo "\n\n\033[32m$FILE32\n\033[37m"
-$C $DIR$FILE32 | $P > $USER$FILE32 | leaks lem-in;
+$C $DIR$FILE32 | $P > $USER$FILE32 | disp_leaks lem-in;
 
 echo "\n\n\033[32m/dev/urandom/\033[37m"
-$C /dev/urandom | $P > $USER-dev-urandom | leaks lem-in;
+$C /dev/urandom | $P > $USER-dev-urandom | disp_leaks lem-in;
 
 echo "\n\n\033[32m/dev/null/\033[37m"
-$C /dev/null | $P > $USER-dev-null | leaks lem-in;
+$C /dev/null | $P > $USER-dev-null | disp_leaks lem-in;
 
 # echo "\n\n\033[32m/dev/zero/\033[37m"
-# $C /dev/zero | $P > $USER-dev-zero | leaks lem-in;
+# $C /dev/zero | $P > $USER-dev-zero | disp_leaks lem-in;
 
 echo "\n\n\033[32mNothing\033[37m"
-echo "" | $P > $USER-Nothing | leaks lem-in;
+echo "" | $P > $USER-Nothing | disp_leaks lem-in;
 
 echo "\n\n\033[32mOutput Difference:\033[37m"
 diff -r $DIR$USER2 $USER > output_difference.txt

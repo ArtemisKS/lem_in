@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazas <vbrazas@student.unit.ua>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/13 13:35:52 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2017/11/13 13:35:53 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2017/08/01 09:28:43 by vbrazas           #+#    #+#             */
+/*   Updated: 2017/11/12 18:23:54 by vbrazas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,26 @@
 
 void	ft_putnbr(int n)
 {
-	int	buf;
-	int r;
+	char	buf[12];
+	long	i;
+	long	nn;
+	short	j;
 
-	r = 1;
-	buf = n;
-	while (buf > 9 || buf < -9)
-	{
-		buf = buf / 10;
-		r = r * 10;
-	}
+	i = 10;
+	j = 2;
+	nn = n;
 	if (n < 0)
 	{
-		ft_putchar('-');
-		ft_putchar(-1 * (n / r) + 48);
-		n = -1 * (n % r);
-		r = r / 10;
+		nn = -nn;
+		j++;
 	}
-	while (r > 0)
-	{
-		ft_putchar(n / r + 48);
-		n = n % r;
-		r = r / 10;
-	}
+	while (nn / i > 0 && ++j)
+		i *= 10;
+	j = 0;
+	if (n < 0)
+		buf[j++] = '-';
+	while ((i /= 10) > 0)
+		buf[j++] = (nn / i) % 10 + '0';
+	buf[j] = '\0';
+	ft_putstr(buf);
 }
