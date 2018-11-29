@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 15:35:29 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 16:38:33 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 17:18:53 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int						main(int ac, char **av)
 	path = run_path_search(room);
 	arr_emm = ants_init(path);
 	det_paths(arr_emm, path);
-	(g_gl->disp_paths && !(g_gl->n_ants_arr = 0)) ? print_paths(room, path) : 1;
+	(!(g_gl->n_ants_arr = 0) && g_gl->dsp_pths) ? print_paths(room, path) : 1;
 	i = -1;
 	while (++i < g_gl->n_ants)
 		arr_emm[i]->room = make_rooms(arr_emm[i]->path, room);

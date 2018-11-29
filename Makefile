@@ -6,7 +6,7 @@
 #    By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/03 20:22:26 by akupriia          #+#    #+#              #
-#    Updated: 2018/11/29 16:20:49 by vdzhanaz         ###   ########.fr        #
+#    Updated: 2018/11/29 16:52:48 by akupriia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ OBJ_D	=	obj/
 OBJ		=	$(addprefix $(OBJ_D), $(SRC:.c=.o))
 LFLAGS	=	-lftprintf -L $(LIB)
 IFLAGS	=	-I $(LIB_HDR) -I ./
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-g -Wall -Wextra -Werror
 
 
 all: $(NAME)

@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 16:15:57 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 16:41:54 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 17:16:13 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool				parse_links(char **room_n, t_room *node, char *str)
 		return (false);
 	}
 	else
-		puterr("Error: wrong room/first link");
+		puterr("Error: wrong room / first link");
 	return (true);
 }
 
@@ -67,10 +67,12 @@ static void			write_children(t_room *room, char **l_arr)
 		memdel_arr((void **)l_arr, ft_arrlen((void **)l_arr));
 		return ;
 	}
-	while (!ft_strequ(l_arr[0], room->name))
-		room = room->next;
-	while (!ft_strequ(l_arr[1], child->name))
+	while (child && !ft_strequ(l_arr[1], child->name))
 		child = child->next;
+	while (room && !ft_strequ(l_arr[0], room->name))
+		room = room->next;
+	if (!room || !child)
+		puterr("Error: room mentioned in links is not viable");
 	room->links[room->n_links++] = child;
 	room->links[room->n_links] = NULL;
 	child->links[child->n_links++] = room;

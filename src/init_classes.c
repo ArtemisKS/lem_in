@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 16:11:24 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 16:18:44 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 16:49:02 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 void					puterr(const char *strerr)
 {
+	ft_putstr(RED);
 	ft_putendl(strerr);
+	ft_putstr(RESET);
+	(g_gl->disp_leaks) ? system("leaks -q lem-in") : 1;
 	exit(1);
 }
 

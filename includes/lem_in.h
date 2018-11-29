@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 15:39:04 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 16:26:29 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 17:17:46 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ typedef struct		s_global
 	char			colour;
 	char			ants_home;
 	char			disp_leaks;
-	char			disp_paths;
+	char			dsp_pths;
 	int				n_ants;
 	int				n_ants_arr;
 	int				n_path;
