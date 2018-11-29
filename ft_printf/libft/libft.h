@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/06 22:05:58 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 07:05:11 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 10:30:05 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ char				*ft_strcat(char *s1, const char *s2);
 char				*ft_strncat(char *s1, const char *s2, size_t n);
 size_t				ft_strlcat(char *dst, const char *src, size_t dstsize);
 int					ft_atoi(const char *str);
+void				memdel_arr(void **arr, int n);
 
 void				*ft_memalloc(size_t size);
 void				ft_memdel(void **ap);

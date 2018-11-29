@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   memdel_arr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akupriia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/02 19:44:45 by akupriia          #+#    #+#             */
-/*   Updated: 2017/11/02 19:44:46 by akupriia         ###   ########.fr       */
+/*   Created: 2018/11/29 09:46:31 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 10:29:54 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char const *s, int fd)
+void		memdel_arr(void **arr, int n)
 {
-	int i;
-
-	i = 0;
-	if (s)
-	{
-		while (s[i] != '\0')
-			ft_putchar_fd(s[i++], fd);
-	}
+	while (--n >= 0)
+		ft_memdel(&arr[n]);
+	free(arr);
 }

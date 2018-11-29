@@ -6,24 +6,27 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 08:58:46 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 08:58:47 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 15:44:51 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
+
+# define ANT_DIFF()	(gl->n_ants - gl->n_ants_arr)
+# define P_DIST()	((*path)->distance - 1)
 
 bool		stend_connected(t_room *room)
 {
 	t_room *node;
 
 	node = room;
-	while (room && room->beg != -1)
+	while (room && room->beg != 'e')
 		room = room->next;
 	if (!(room->distance))
 	{
 		room = node;
 		br_first_search(room);
-		while (room && room->beg != -1)
+		while (room && room->beg != 'e')
 			room = room->next;
 		if (room->distance)
 			return (true);
@@ -33,82 +36,57 @@ bool		stend_connected(t_room *room)
 	return (false);
 }
 
-int			assign_ways_sth(t_path **path)
+static bool		help_det_palgo(t_path **path)
 {
-	if (gl->n_ants - gl->n_ants_arr >= (*path)->distance - 1 && !((*path)->occupied))
-	{
-		(*path)->occupied = 1;
-		return (0);
-	}
-	if (((*path)->next)->distance - (*path)->distance <= gl->n_ants - gl->n_ants_arr
+	bool	res;
+
+	res = true;
+	if (ANT_DIFF() >= P_DIST() && !((*path)->occupied) && ((*path)->occupied = 1))
+		res = false;
+	else if (((*path)->next)->distance - (*path)->distance <= ANT_DIFF()
 		&& (*path)->occupied && !(((*path)->next)->occupied))
 	{
 		(*path) = (*path)->next;
 		(*path)->occupied = 1;
-		return (0);
+		res  = false;
 	}
-	return (1);
+	return (res);
 }
 
-int			assign_ways_thing(t_path **path, t_path *tmp)
+static bool		det_paths_algo(t_path **path, t_path *way)
 {
 	if ((!((*path)->next)) &&
-		(gl->n_ants - gl->n_ants_arr < (*path)->distance - 1 || (*path)->occupied))
+		(ANT_DIFF() < P_DIST() || (*path)->occupied))
 	{
-		(*path) = tmp;
-		while ((*path) && gl->n_ants - gl->n_ants_arr >= (*path)->distance - 1)
-		{
-			(*path)->occupied = 0;
+		(*path) = way;
+		while ((*path) && ANT_DIFF() >= P_DIST() && !((*path)->occupied = 0))
 			(*path) = (*path)->next;
-		}
-		(*path) = tmp;
+		(*path) = way;
 		(*path)->occupied = 1;
-		return (0);
+		return (false);
 	}
-	if (!assign_ways_sth(path))
-		return (0);
+	if (!help_det_palgo(path))
+		return (false);
 	(*path) = (*path)->next;
-	return (1);
+	return (true);
 }
 
-void		assign_ways(t_emmet **ant_arr, t_path *path)
+void		det_paths(t_emmet **ant_arr, t_path *path)
 {
 	int		i;
-	t_path	*tmp;
+	t_path	*way;
 
-	tmp = path;
-	i = 0;
-	while (i < gl->n_ants)
+	way = path;
+	i = -1;
+	while (++i < gl->n_ants)
 	{
 		while (path)
-			if (!assign_ways_thing(&path, tmp))
+			if (!det_paths_algo(&path, way))
 				break ;
 		ant_arr[i]->path = path;
 		path->n_ants++;
 		gl->n_ants_arr++;
-		path = tmp;
-		i++;
+		path = way;
 	}
 }
 
-t_room	*make_rooms(t_path *path, t_room *room)
-{
-	int			i;
-	t_room	*res;
-	t_room	*tmp;
-	t_room	*t;
-
-	tmp = room;
-	res = copy_kid(room);
-	i = path->distance - 2;
-	while (i >= 0)
-	{
-		room = tmp;
-		while (room->next && path->path[i] != room->id)
-			room = room->next;
-		t = copy_kid(room);
-		ft_vpush(&res, t);
-		i--;
-	}
-	return (res);
-}

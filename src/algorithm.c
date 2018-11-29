@@ -6,18 +6,18 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 08:58:52 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 08:58:53 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 15:31:07 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-static bool		fill_queue(t_room *room, int distance, t_bfs **queue)
+static bool				fill_queue(t_room *room, int distance, t_bfs **queue)
 {
 	int i;
 
 	i = -1;
-	while (room->beg != 1)
+	while (room->beg != 's')
 		room = room->next;
 	while (room->links[++i])
 		if (!room->links[i]->used)
@@ -38,12 +38,12 @@ static bool		fill_queue(t_room *room, int distance, t_bfs **queue)
 	return (true);
 }
 
-static void		add_tq_assign_ind(t_room *room, int *distance, t_room *tmp,
+static void				add_tq_assign_ind(t_room *room, int *distance, t_room *tmp,
 	t_bfs **queue)
 {
 	int i;
 
-	i = 0;
+	i = -1;
 	if (room->father && tmp->father)
 	{
 		if (room->father->id != tmp->father->id)
@@ -51,7 +51,7 @@ static void		add_tq_assign_ind(t_room *room, int *distance, t_room *tmp,
 	}
 	else if (!room->father || !tmp->father)
 		(*distance)++;
-	while (room->links[i] && i < room->n_links)
+	while (room->links[++i] && i < room->n_links)
 	{
 		if (!room->links[i]->marked && !room->links[i]->used)
 		{
@@ -60,11 +60,26 @@ static void		add_tq_assign_ind(t_room *room, int *distance, t_room *tmp,
 			room->links[i]->father = room;
 			room->links[i]->marked = 1;
 		}
-		i++;
 	}
 }
 
-void			br_first_search(t_room *room)
+
+static inline int		links_marked(t_room *room)
+{
+	int i;
+
+	i = 0;
+	while (room->links[i])
+	{
+		if (!room->links[i]->marked && !room->links[i]->used)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+
+void					br_first_search(t_room *room)
 {
 	t_bfs		*queue;
 	t_bfs		*tmp_q;
@@ -80,7 +95,7 @@ void			br_first_search(t_room *room)
 	{
 		add_tq_assign_ind(room, &distance, node, &queue);
 		node = room;
-		if ((tmp_q = pop_queue(&queue)))
+		if ((tmp_q = pop_q(&queue)))
 			room = tmp_q->room;
 	}
 }

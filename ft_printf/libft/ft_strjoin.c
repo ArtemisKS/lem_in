@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazas <vbrazas@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/05 20:50:12 by vbrazas           #+#    #+#             */
-/*   Updated: 2017/11/12 18:24:58 by vbrazas          ###   ########.fr       */
+/*   Created: 2017/11/09 12:48:43 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 12:54:54 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,24 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*buf;
-	size_t	i;
-	size_t	j;
+	size_t	len;
+	char	*joy;
 
-	if (s1 == NULL || s2 == NULL)
+	if (!s1 && !s2)
 		return (NULL);
-	buf = (char *)malloc(sizeof(*buf) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (buf == NULL)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (s1[j])
-		buf[i++] = s1[j++];
-	j = 0;
-	while (s2[j])
-		buf[i++] = s2[j++];
-	buf[i] = '\0';
-	return (buf);
+	if (s1 && !s2)
+		return (ft_strdup((char*)s1));
+	if (!s1 && s2)
+		return (ft_strdup((char*)s2));
+	len = ft_strlen(s1) + ft_strlen(s2);
+	joy = ft_strnew(len);
+	if (joy && len > 0)
+	{
+		while (len-- > ft_strlen(s1))
+			joy[len] = s2[len - ft_strlen(s1)];
+		len++;
+		while (len-- > 0)
+			joy[len] = s1[len];
+	}
+	return (joy);
 }

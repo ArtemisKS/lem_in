@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libftprintf.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazas <vbrazas@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/30 20:15:12 by vbrazas           #+#    #+#             */
-/*   Updated: 2018/05/22 21:05:40 by vbrazas          ###   ########.fr       */
+/*   Updated: 2018/11/29 10:30:00 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct		s_list
 }					t_list;
 
 int					ft_atoi(const char *str);
+void				memdel_arr(void **arr, int n);
 int					ft_atoi_base(const char *str, int str_base);
 int					ft_isdigit(int c);
 char				*ft_strcpy(char *dest, const char *src);

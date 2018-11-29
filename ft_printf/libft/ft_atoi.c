@@ -3,30 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazas <vbrazas@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/03 20:09:38 by vbrazas           #+#    #+#             */
-/*   Updated: 2018/05/24 20:20:16 by vbrazas          ###   ########.fr       */
+/*   Created: 2017/11/20 19:34:40 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2017/11/20 19:34:56 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_atoi(const char *str)
-{
-	short			i;
-	unsigned long	result;
-	short			minus;
+#include "libft.h"
 
-	i = 0;
-	result = 0;
-	minus = 1;
-	while ((str[i] >= '\a' && str[i] <= '\r') || str[i] == 32)
+int	ft_atoi(const char *str)
+{
+	int			i;
+	long long	res;
+	int			flag;
+
+	i = -1;
+	res = 0;
+	flag = -1;
+	while (str[i + 1] == ' ' || (str[i + 1] > 8 && str[i + 1] < 14))
 		i++;
-	if (str[i] == '-')
-		minus = -1;
-	if (str[i] == '-' || str[i] == '+')
+	if (str[i + 1] == '-' || str[i + 1] == '+')
+	{
 		i++;
-	while (str[i] >= '0' && str[i] <= '9')
-		result = result * 10 + (str[i++] - '0');
-	result = result * minus;
-	return ((int)result);
+		if (str[i] == '-')
+			flag = 0;
+	}
+	while (str[++i] > 47 && str[i] < 58)
+	{
+		if (res <= MAX / 10 && (MAX - res * 10 - (str[i] - 48)) >= 0)
+			res = res * 10 + (str[i] - 48);
+		else
+			return (flag);
+	}
+	if (flag == 0)
+		return ((int)(-1 * res));
+	return ((int)res);
 }

@@ -78,7 +78,8 @@ SRC = ft_memcpy.c \
 		ft_strtrimu.c \
 		ft_masdel.c \
 		get_next_line.c \
-		ft_lstdelcont.c
+		ft_lstdelcont.c \
+		memdel_arr.c
 
 HEADER = libft.h
 

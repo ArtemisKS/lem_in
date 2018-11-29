@@ -3,40 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazas <vbrazas@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/06 21:28:07 by vbrazas           #+#    #+#             */
-/*   Updated: 2017/11/12 18:21:52 by vbrazas          ###   ########.fr       */
+/*   Created: 2017/11/10 13:13:26 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2017/11/10 13:13:28 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_itoa(int n)
+static size_t	getsize(int n)
 {
-	char	*buf;
-	long	i;
-	long	nn;
-	short	j;
+	size_t	size;
 
-	i = 10;
-	j = 2;
-	nn = n;
+	size = 1;
 	if (n < 0)
 	{
-		nn = -nn;
-		j++;
+		size++;
+		n = n / (-10);
+		if (n > 0)
+			size++;
 	}
-	while (nn / i > 0 && ++j)
-		i *= 10;
-	buf = (char *)malloc(sizeof(char) * j);
-	if (buf == NULL)
-		return (NULL);
-	j = 0;
-	if (n < 0)
-		buf[j++] = '-';
-	while ((i /= 10) > 0)
-		buf[j++] = (nn / i) % 10 + '0';
-	buf[j] = '\0';
-	return (buf);
+	while (n > 9)
+	{
+		n = n / 10;
+		size++;
+	}
+	return (size);
+}
+
+char			*ft_itoa(int n)
+{
+	size_t	size;
+	char	*num;
+
+	size = getsize(n);
+	num = ft_strnew(size);
+	if (num)
+	{
+		if (n < 0)
+		{
+			num[0] = '-';
+			size--;
+			num[size] = -1 * (n % 10) + 48;
+			n = n / (-10);
+		}
+		while (size-- > 0 && num[size] == '\0')
+		{
+			num[size] = (n % 10) + 48;
+			n = n / 10;
+		}
+	}
+	return (num);
 }

@@ -6,25 +6,11 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 08:59:07 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 09:15:41 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 15:47:43 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
-
-int		links_marked(t_room *room)
-{
-	int i;
-
-	i = 0;
-	while (room->links[i])
-	{
-		if (!room->links[i]->marked && !room->links[i]->used)
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
 static inline void	calibrate_dist(t_room *room)
 {
@@ -53,7 +39,7 @@ t_path				*det_way(t_room *room)
 	path = ft_memalloc(sizeof(t_path));
 	calibrate_dist(room);
 	node = room;
-	while (room && room->beg != -1)
+	while (room && room->beg != 'e')
 		room = room->next;
 	path->path = ft_memalloc(sizeof(int) * room->distance);
 	path->distance = room->distance;
@@ -70,32 +56,7 @@ t_path				*det_way(t_room *room)
 	return (path);
 }
 
-int		realloc_darr()
-{
-	static	int		iter = 1;
-	char			**printcpy;
-	int				i;
-
-	if (iter == 1 || gl->map[BUFF] != NULL)
-	{
-		gl->n_lines = BUFF * iter;
-		printcpy = ft_memalloc(sizeof(char *) * (gl->n_lines + 1));
-		gl->n_lines -= BUFF;
-		i = -1;
-		while (++i < gl->n_lines)
-			printcpy[i] = gl->map[i];
-		i = -1;
-		if (iter != 1)
-			free(gl->map);
-		else
-			gl->iter = 0;
-		gl->map = printcpy;
-		iter++;
-	}
-	return (1);
-}
-
-bool		check_n_emm(char *line)
+bool				check_n_emm(char *line)
 {
 	if (!(ft_strlen(line)))
 		puterr("Error: empty line before number of ants");
@@ -104,4 +65,21 @@ bool		check_n_emm(char *line)
 	else if (ft_strequ(line, "##end"))
 		puterr("Error: ##end before number of ants");
 	return (COMMENT(line) ? (false) : (true));
+}
+
+
+
+bool				emm_may_move(t_emmet *ant, t_room *room)
+{
+	int i;
+
+	i = 0;
+	while ((ant->room)->next && ((ant->room)->next)->id != room->id)
+		room = room->next;
+	if (ant->id < gl->n_ants && (ant->room)->beg == 'e')
+		return (true);
+	if ((!(ant->room)->next && (ant->room)->beg == 'e'
+		&& ant->id == gl->n_ants) || room->occupied)
+		return (false);
+	return (true);
 }

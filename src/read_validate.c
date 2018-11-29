@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 06:03:41 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 07:50:02 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 15:43:37 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,15 @@ bool				valid_link(char *str, char ***links, t_room *room)
 
 int					handle_stend(char *str, char *stend)
 {
-	if (ft_strequ(str, "##start") && !(gl->has_start) && (*stend = 's')
+	if ((ft_strequ(str, "##end") && gl->has_end)
+	|| (ft_strequ(str, "##start") && gl->has_start))
+		puterr("Error: double start / end");
+	else if (ft_strequ(str, "##start") && !(gl->has_start) && (*stend = 's')
 		&& (gl->has_start = true))
 		return (-1);
 	else if (ft_strequ(str, "##end") && !(gl->has_end) && (*stend = 'e')
 		&& (gl->has_end = true))
 		return (-1);
-	else if ((ft_strequ(str, "##end") || ft_strequ(str, "##start"))
-		&& ((gl->has_end) || (gl->has_start)))
-		puterr("Error: double start/end");
 	else if (COMMENT(str))
 		return (-1);
 	return (!(ft_strlen(str)) ? (0) : (1));

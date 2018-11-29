@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/28 23:44:45 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 09:15:41 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/11/29 15:39:04 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 15:52:34 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@
 # include <libftprintf.h>
 # include <stdint.h>
 # include <stdbool.h>
+# include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
-# define BUFF				30000
+# define BUFF				10
 # define COMMENT(line)		(line && line[0] == '#')
 # define N_LETTER_L(line)	(line && line[0] != 'L')
 # define CYAN				"\033[0;36m"
@@ -39,9 +42,9 @@ typedef struct		s_room
 	unsigned int	marked : 1;
 	unsigned int	occupied : 1;
 	unsigned int	used : 1;
+	char			beg;
 	int				distance;
 	int				id;
-	int				beg;
 	int				n_links;
 	int				x;
 	int				y;
@@ -59,11 +62,11 @@ typedef struct		s_bfs
 
 typedef struct		s_path
 {
-	int				*path;
 	int				distance;
-	unsigned int	occupied : 1;
 	int				n_ants;
 	int				n_path;
+	int				occupied;
+	int				*path;
 	struct s_path	*next;
 }					t_path;
 
@@ -71,7 +74,7 @@ typedef struct		s_emmet
 {
 	int				id;
 	struct s_path	*path;
-	struct s_room *room;
+	struct s_room	*room;
 }					t_emmet;
 
 typedef struct		s_global
@@ -86,40 +89,41 @@ typedef struct		s_global
 	int				n_path;
 	int				fd;
 	unsigned int	iter;
-	char			**map;
 	int				n_lines;
 	int				gnl_ret;
 	int				ind;
 	unsigned int	has_start : 1;
 	unsigned int	has_end : 1;
+	char			**map;
 }					t_global;
 
 t_global			*gl;
 
-t_room				*init_room();
-t_room				*copy_kid(t_room *room);
+t_room				*link_cpy(t_room *room);
 void				puterr(const char *strerr);
-void				free_arr(void **arr);
+int					ft_arrlen(void **arr);
 void				assign_rooms(t_emmet **ant_arr, t_room *room);
 int					ft_min(int a, int b);
-int					ant_can_go(t_emmet *ant, t_room *room);
+bool				emm_may_move(t_emmet *ant, t_room *room);
 bool				n_ants_valid(char *line);
 void				bzero_room(t_room *room);
+t_emmet				**ants_init(t_path *path);
 void				br_first_search(t_room *room);
-void				ft_vpush(t_room **alst, t_room *new);
-void				ft_wpush(t_path **alst, t_path *new);
+void				push_room(t_room **alst, t_room *new);
+void				push_way(t_path **alst, t_path *new);
 t_bfs				*add_to_q(t_room *room, t_bfs *tq);
-t_bfs				*pop_queue(t_bfs **tq);
-int					links_marked(t_room *room);
+t_bfs				*pop_q(t_bfs **tq);
+t_path				*add_to_p(t_path *path, t_path *tp);
 t_path				*det_way(t_room *room);
-void				make_step(t_emmet **ant_arr, t_room *room);
+void				cond_one_st(t_emmet **ant_arr, t_room *room);
 bool				stend_valid(t_room *room);
 void				print_paths(t_room *room, t_path *path);
+t_path				*run_path_search(t_room *room);
 bool				st_end_nearby(t_room *room);
-t_room				*parse_validate();
+t_room				*parse_validate(void);
 void				print_emmet(int id_emm, t_room *room,
 					int n_path);
-void				make_step_thing(t_emmet **ant_arr,
+void				cond_one_st_thing(t_emmet **ant_arr,
 					t_room *room, int id_emm);
 void				output_emmets(t_emmet **ant_arr, int id_emm);
 bool				valid_room(char *line, char ***name, t_room *room);
@@ -132,12 +136,8 @@ t_room				*parse_val_rooms(char *line);
 void				form_links(t_room *room, char **link);
 void				process_links(char *line, t_room *room);
 bool				stend_connected(t_room *room);
-int					assign_ways_sth(t_path **path);
-int					assign_ways_thing(t_path **path, t_path *tmp);
-void				assign_ways(t_emmet **ant_arr, t_path *path);
-t_room				*make_rooms(t_path *path, t_room *room);
-int					realloc_darr();
-int					realloc_darr();
+void				det_paths(t_emmet **ant_arr, t_path *path);
+bool				realloc_darr(void);
 int					valid_room_3(char ***name, t_room *room);
 bool				check_n_emm(char *line);
 bool				is_int(char *line);

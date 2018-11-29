@@ -1,30 +1,31 @@
-#******************************************************************************#
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: akupriia <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/03 20:22:26 by akupriia          #+#    #+#              #
-#    Updated: 2018/06/03 20:22:29 by akupriia         ###   ########.fr        #
+#    Updated: 2018/11/29 15:50:07 by vdzhanaz         ###   ########.fr        #
 #                                                                              #
-#******************************************************************************#
+# **************************************************************************** #
 
 NAME	=	lem-in
 LIB		=	ft_printf/
 LIB_HDR	=	$(LIB)hdr/
 SRCD	=	src/
 SRC		=	$(SRCD)algorithm.c \
-			$(SRCD)assign_rooms.c \
 			$(SRCD)find_paths.c \
 			$(SRCD)lst_func.c \
-			$(SRCD)main.c \
-			$(SRCD)parse_make_step.c \
+			$(SRCD)ft_lem_in.c \
+			$(SRCD)proc_cond_st.c \
 			$(SRCD)print_ants.c \
+			$(SRCD)extra_funcs.c \
 			$(SRCD)read_validate.c \
 			$(SRCD)rooms_links.c \
 			$(SRCD)struct_funcs.c \
-			$(SRCD)ways_rooms.c
+			$(SRCD)ways_rooms.c \
+			$(SRCD)utils.c
 OBJ_D	=	obj/
 OBJ		=	$(addprefix $(OBJ_D), $(SRC:.c=.o))
 LFLAGS	=	-lftprintf -L $(LIB)

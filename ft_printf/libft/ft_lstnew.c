@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazas <vbrazas@student.unit.ua>          +#+  +:+       +#+        */
+/*   By: vdzhanaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/10 16:26:43 by vbrazas           #+#    #+#             */
-/*   Updated: 2017/12/06 12:32:43 by vbrazas          ###   ########.fr       */
+/*   Created: 2017/11/15 18:46:43 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2017/11/15 18:46:45 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,29 @@
 
 t_list	*ft_lstnew(void const *content, size_t content_size)
 {
-	t_list	*t;
+	t_list *new;
 
-	if (!(t = (t_list *)malloc(sizeof(t_list))))
-		return (NULL);
-	if (content == NULL)
+	new = (t_list*)malloc(sizeof(t_list));
+	if (new)
 	{
-		t->content = NULL;
-		t->content_size = 0;
+		if ((new->content = ft_memalloc(content_size)))
+		{
+			if (content)
+			{
+				new->content = ft_memcpy(new->content, content, content_size);
+				new->content_size = content_size;
+			}
+			else
+			{
+				new->content = NULL;
+				new->content_size = 0;
+			}
+			new->next = NULL;
+		}
+		else
+			ft_memdel((void**)&new);
+		return (new);
 	}
 	else
-	{
-		if (!(t->content = (void *)malloc(content_size)))
-		{
-			free(t);
-			return (NULL);
-		}
-		ft_memcpy(t->content, content, content_size);
-		t->content_size = content_size;
-	}
-	t->next = NULL;
-	return (t);
+		return (NULL);
 }
