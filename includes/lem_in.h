@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 15:39:04 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 15:52:34 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 16:26:29 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include <stdint.h>
 # include <stdbool.h>
 # include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 
 # define BUFF				10
 # define COMMENT(line)		(line && line[0] == '#')
@@ -33,7 +33,6 @@
 # define MAGENTA			"\033[0;35m"
 # define BROWN				"\033[22;33m"
 # define RESET				"\033[0m"
-
 
 static const char	*g_col[] = {MAGENTA, RESET, BLUE, RED, YELLOW, CYAN,
 	LRED, BROWN, NULL};
@@ -97,7 +96,7 @@ typedef struct		s_global
 	char			**map;
 }					t_global;
 
-t_global			*gl;
+t_global			*g_gl;
 
 t_room				*link_cpy(t_room *room);
 void				puterr(const char *strerr);
@@ -113,11 +112,9 @@ void				push_room(t_room **alst, t_room *new);
 void				push_way(t_path **alst, t_path *new);
 t_bfs				*add_to_q(t_room *room, t_bfs *tq);
 t_bfs				*pop_q(t_bfs **tq);
-t_path				*add_to_p(t_path *path, t_path *tp);
 t_path				*det_way(t_room *room);
 void				cond_one_st(t_emmet **ant_arr, t_room *room);
 bool				stend_valid(t_room *room);
-void				print_paths(t_room *room, t_path *path);
 t_path				*run_path_search(t_room *room);
 bool				st_end_nearby(t_room *room);
 t_room				*parse_validate(void);
@@ -125,7 +122,8 @@ void				print_emmet(int id_emm, t_room *room,
 					int n_path);
 void				cond_one_st_thing(t_emmet **ant_arr,
 					t_room *room, int id_emm);
-void				output_emmets(t_emmet **ant_arr, int id_emm);
+void				print_paths(t_room *room, t_path *path);
+void				do_emm_printing(t_emmet **ant_arr, int id_emm);
 bool				valid_room(char *line, char ***name, t_room *room);
 bool				valid_link(char *line, char ***name, t_room *room);
 int					handle_stend(char *line, char *stend);
@@ -133,12 +131,10 @@ t_room				*add_room(char **name, t_room *node, char stend);
 bool				parse_links(char **name, t_room *node,
 					char *line);
 t_room				*parse_val_rooms(char *line);
-void				form_links(t_room *room, char **link);
 void				process_links(char *line, t_room *room);
 bool				stend_connected(t_room *room);
 void				det_paths(t_emmet **ant_arr, t_path *path);
 bool				realloc_darr(void);
-int					valid_room_3(char ***name, t_room *room);
 bool				check_n_emm(char *line);
 bool				is_int(char *line);
 

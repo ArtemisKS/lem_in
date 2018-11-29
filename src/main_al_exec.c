@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   algorithm.c                                        :+:      :+:    :+:   */
+/*   main_al_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 08:58:52 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 15:31:07 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/11/29 16:07:04 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 16:34:28 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "includes/lem_in.h"
 
 static bool				fill_queue(t_room *room, int distance, t_bfs **queue)
 {
@@ -38,8 +38,8 @@ static bool				fill_queue(t_room *room, int distance, t_bfs **queue)
 	return (true);
 }
 
-static void				add_tq_assign_ind(t_room *room, int *distance, t_room *tmp,
-	t_bfs **queue)
+static void				add_tq_assign_ind(t_room *room, int *distance,
+	t_room *tmp, t_bfs **queue)
 {
 	int i;
 
@@ -63,21 +63,16 @@ static void				add_tq_assign_ind(t_room *room, int *distance, t_room *tmp,
 	}
 }
 
-
-static inline int		links_marked(t_room *room)
+static inline bool		links_marked(t_room *room)
 {
 	int i;
 
-	i = 0;
-	while (room->links[i])
-	{
+	i = -1;
+	while (room->links[++i])
 		if (!room->links[i]->marked && !room->links[i]->used)
-			return (0);
-		i++;
-	}
-	return (1);
+			return (false);
+	return (true);
 }
-
 
 void					br_first_search(t_room *room)
 {
@@ -99,4 +94,3 @@ void					br_first_search(t_room *room)
 			room = tmp_q->room;
 	}
 }
-

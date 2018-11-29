@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ways_rooms.c                                       :+:      :+:    :+:   */
+/*   det_paths.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 08:58:46 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 15:44:51 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/11/29 16:12:50 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 16:34:58 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "includes/lem_in.h"
 
-# define ANT_DIFF()	(gl->n_ants - gl->n_ants_arr)
-# define P_DIST()	((*path)->distance - 1)
+#define ANT_DIFF()	(g_gl->n_ants - g_gl->n_ants_arr)
+#define P_DIST()	((*path)->distance - 1)
 
-bool		stend_connected(t_room *room)
+bool			stend_connected(t_room *room)
 {
 	t_room *node;
 
@@ -41,14 +41,15 @@ static bool		help_det_palgo(t_path **path)
 	bool	res;
 
 	res = true;
-	if (ANT_DIFF() >= P_DIST() && !((*path)->occupied) && ((*path)->occupied = 1))
+	if (ANT_DIFF() >= P_DIST() && !((*path)->occupied)
+		&& ((*path)->occupied = 1))
 		res = false;
 	else if (((*path)->next)->distance - (*path)->distance <= ANT_DIFF()
 		&& (*path)->occupied && !(((*path)->next)->occupied))
 	{
 		(*path) = (*path)->next;
 		(*path)->occupied = 1;
-		res  = false;
+		res = false;
 	}
 	return (res);
 }
@@ -71,22 +72,21 @@ static bool		det_paths_algo(t_path **path, t_path *way)
 	return (true);
 }
 
-void		det_paths(t_emmet **ant_arr, t_path *path)
+void			det_paths(t_emmet **ant_arr, t_path *path)
 {
 	int		i;
 	t_path	*way;
 
 	way = path;
 	i = -1;
-	while (++i < gl->n_ants)
+	while (++i < g_gl->n_ants)
 	{
 		while (path)
 			if (!det_paths_algo(&path, way))
 				break ;
 		ant_arr[i]->path = path;
 		path->n_ants++;
-		gl->n_ants_arr++;
+		g_gl->n_ants_arr++;
 		path = way;
 	}
 }
-

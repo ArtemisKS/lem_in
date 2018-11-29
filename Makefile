@@ -6,7 +6,7 @@
 #    By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/03 20:22:26 by akupriia          #+#    #+#              #
-#    Updated: 2018/11/29 15:50:07 by vdzhanaz         ###   ########.fr        #
+#    Updated: 2018/11/29 16:20:49 by vdzhanaz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,17 +14,17 @@ NAME	=	lem-in
 LIB		=	ft_printf/
 LIB_HDR	=	$(LIB)hdr/
 SRCD	=	src/
-SRC		=	$(SRCD)algorithm.c \
-			$(SRCD)find_paths.c \
-			$(SRCD)lst_func.c \
+SRC		=	$(SRCD)main_al_exec.c \
+			$(SRCD)det_mul_ways.c \
+			$(SRCD)auxilary_func.c \
 			$(SRCD)ft_lem_in.c \
 			$(SRCD)proc_cond_st.c \
-			$(SRCD)print_ants.c \
+			$(SRCD)cout_emmets.c \
 			$(SRCD)extra_funcs.c \
-			$(SRCD)read_validate.c \
-			$(SRCD)rooms_links.c \
-			$(SRCD)struct_funcs.c \
-			$(SRCD)ways_rooms.c \
+			$(SRCD)parse_a_valid.c \
+			$(SRCD)parse_rms_lnks.c \
+			$(SRCD)init_classes.c \
+			$(SRCD)det_paths.c \
 			$(SRCD)utils.c
 OBJ_D	=	obj/
 OBJ		=	$(addprefix $(OBJ_D), $(SRC:.c=.o))

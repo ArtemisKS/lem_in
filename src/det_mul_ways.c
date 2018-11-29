@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_paths.c                                       :+:      :+:    :+:   */
+/*   det_mul_ways.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 08:59:07 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 15:47:43 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/11/29 16:14:58 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 16:25:28 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "includes/lem_in.h"
 
 static inline void	calibrate_dist(t_room *room)
 {
@@ -67,8 +67,6 @@ bool				check_n_emm(char *line)
 	return (COMMENT(line) ? (false) : (true));
 }
 
-
-
 bool				emm_may_move(t_emmet *ant, t_room *room)
 {
 	int i;
@@ -76,10 +74,10 @@ bool				emm_may_move(t_emmet *ant, t_room *room)
 	i = 0;
 	while ((ant->room)->next && ((ant->room)->next)->id != room->id)
 		room = room->next;
-	if (ant->id < gl->n_ants && (ant->room)->beg == 'e')
+	if (ant->id < g_gl->n_ants && (ant->room)->beg == 'e')
 		return (true);
 	if ((!(ant->room)->next && (ant->room)->beg == 'e'
-		&& ant->id == gl->n_ants) || room->occupied)
+		&& ant->id == g_gl->n_ants) || room->occupied)
 		return (false);
 	return (true);
 }

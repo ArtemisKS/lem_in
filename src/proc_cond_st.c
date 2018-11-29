@@ -6,29 +6,26 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 15:38:58 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 15:42:53 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 16:44:50 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "includes/lem_in.h"
 
-void		cond_one_st(t_emmet **ant_arr, t_room *room)
+void			cond_one_st(t_emmet **ant_arr, t_room *room)
 {
-	t_room	*t;
+	t_room		*node;
 	int			ant_id;
 
-	ant_id = 0;
-	t = room;
-	while (ant_id < gl->n_ants && emm_may_move(ant_arr[ant_id], room))
-	{
+	ant_id = -1;
+	node = room;
+	while (++ant_id < g_gl->n_ants && emm_may_move(ant_arr[ant_id], room))
 		if ((ant_arr[ant_id]->room)->beg != 'e')
 		{
 			cond_one_st_thing(ant_arr, room, ant_id);
-			output_emmets(ant_arr, ant_id);
-			room = t;
+			do_emm_printing(ant_arr, ant_id);
+			room = node;
 		}
-		ant_id++;
-	}
 	ft_putchar('\n');
 }
 
@@ -56,7 +53,7 @@ bool			stend_valid(t_room *room)
 	return (res);
 }
 
-void		print_paths(t_room *room, t_path *path)
+void			print_paths(t_room *room, t_path *path)
 {
 	int			i;
 	t_room		*node;
@@ -77,7 +74,7 @@ void		print_paths(t_room *room, t_path *path)
 				ft_printf("%s%s ]\n", room->name, RESET);
 			room = node;
 		}
-		if (gl->disp_emmets)
+		if (g_gl->disp_emmets)
 			ft_printf("ants number on da way: %s%d%s\n",
 			g_col[path->n_path % 8], path->n_ants, RESET);
 		path = path->next;
@@ -85,7 +82,7 @@ void		print_paths(t_room *room, t_path *path)
 	ft_putchar('\n');
 }
 
-bool		st_end_nearby(t_room *room)
+bool			st_end_nearby(t_room *room)
 {
 	bool	res;
 
@@ -97,7 +94,7 @@ bool		st_end_nearby(t_room *room)
 	return (res);
 }
 
-t_room		*parse_validate(void)
+t_room			*parse_validate(void)
 {
 	char			*str;
 	t_room			*room;
@@ -105,22 +102,23 @@ t_room		*parse_validate(void)
 
 	room = NULL;
 	ind = 0;
-	while ((gl->gnl_ret = get_next_line(gl->fd, &str)) > 0 && realloc_darr() && ++ind && (gl->map[gl->iter++] = str))
+	while ((g_gl->gnl_ret = get_next_line(g_gl->fd, &str)) > 0
+	&& realloc_darr() && ++ind && (g_gl->map[g_gl->iter++] = str))
 	{
 		if (!check_n_emm(str))
 			continue ;
 		if (!(n_ants_valid(str)))
 			puterr("Error: wrong number of ants");
 		else
-			break;
+			break ;
 	}
 	if (!(room = parse_val_rooms(str)))
 		puterr("Error: wrong first room");
 	if (!(stend_valid(room)))
 		puterr("Error: wrong start/end, or there is no possible path");
 	ft_strdel(&str);
-	if (gl->gnl_ret < 0 || !ind)
+	if (g_gl->gnl_ret < 0 || !ind)
 		puterr("Error: invalid or empty file");
-	(gl->fd) ? close(gl->fd) : 1;
+	(g_gl->fd) ? close(g_gl->fd) : 1;
 	return (room);
 }

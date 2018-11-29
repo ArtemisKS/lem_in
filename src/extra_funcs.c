@@ -6,13 +6,13 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 15:48:38 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 15:53:09 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 16:29:52 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "includes/lem_in.h"
 
-int			ft_arrlen(void **arr)
+int						ft_arrlen(void **arr)
 {
 	int	i;
 
@@ -72,23 +72,16 @@ t_emmet					**ants_init(t_path *path)
 	t_path	*tmp;
 	t_emmet	**arr_emm;
 
-	i = 0;
-	arr_emm = ft_memalloc(sizeof(t_emmet *) * gl->n_ants);
-	while (i < gl->n_ants)
+	i = -1;
+	arr_emm = ft_memalloc(sizeof(t_emmet *) * g_gl->n_ants);
+	while (++i < g_gl->n_ants)
 	{
 		arr_emm[i] = ft_memalloc(sizeof(t_emmet));
 		arr_emm[i]->room = NULL;
 		arr_emm[i]->id = i + 1;
-		i++;
 	}
 	tmp = path;
-	i = 0;
-	while (path)
-	{
-		i++;
-		path->occupied = 0;
-		path = path->next;
-	}
-	path = tmp;
+	while (tmp && !(tmp->occupied = 0))
+		tmp = tmp->next;
 	return (arr_emm);
 }

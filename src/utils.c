@@ -6,11 +6,11 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 15:28:41 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 15:35:03 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 16:42:14 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "includes/lem_in.h"
 
 int				ft_min(int a, int b)
 {
@@ -27,7 +27,7 @@ bool			n_ants_valid(char *line)
 	while (line[++i])
 		if (!(ft_isdigit(line[i])))
 			return (false);
-	gl->n_ants = ft_atoi(line);
+	g_gl->n_ants = ft_atoi(line);
 	return (true);
 }
 
@@ -48,23 +48,23 @@ bool			realloc_darr(void)
 	char			**t_map;
 	int				i;
 
-	if ((gl->map && gl->map[BUFF - 1]) || iterator == 1)
+	if ((g_gl->map && g_gl->map[BUFF - 1]) || iterator == 1)
 	{
-		gl->n_lines = BUFF * iterator;
-		t_map = ft_memalloc(sizeof(char *) * (gl->n_lines + 1));
-		gl->n_lines -= BUFF;
+		g_gl->n_lines = BUFF * iterator;
+		t_map = ft_memalloc(sizeof(char *) * (g_gl->n_lines + 1));
+		g_gl->n_lines -= BUFF;
 		i = -1;
-		while (++i < gl->n_lines && (t_map[i] = gl->map[i]))
+		while (++i < g_gl->n_lines && (t_map[i] = g_gl->map[i]))
 			;
-		(iterator != 1) ? (free(gl->map))
-		: (gl->iter = 0);
-		gl->map = t_map;
+		(iterator != 1) ? (free(g_gl->map))
+		: (g_gl->iter = 0);
+		g_gl->map = t_map;
 		iterator++;
 	}
 	return (true);
 }
 
-t_bfs				*pop_q(t_bfs **queue)
+t_bfs			*pop_q(t_bfs **queue)
 {
 	t_bfs		*q_ret;
 	t_bfs		*queue_tmp;

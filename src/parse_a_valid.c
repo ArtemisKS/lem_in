@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_validate.c                                    :+:      :+:    :+:   */
+/*   parse_a_valid.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 06:03:41 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 15:43:37 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/11/29 16:10:18 by vdzhanaz          #+#    #+#             */
+/*   Updated: 2018/11/29 16:41:32 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "includes/lem_in.h"
 
 static bool			valid_room_coord(char ***room_n, t_room *room)
 {
@@ -31,7 +31,8 @@ static bool			valid_room_coord(char ***room_n, t_room *room)
 		return (false);
 	while (room)
 	{
-		if ((room->x == ft_atoi((*room_n)[1]) && room->y == ft_atoi((*room_n)[2]))
+		if ((room->x == ft_atoi((*room_n)[1])
+		&& room->y == ft_atoi((*room_n)[2]))
 		|| (ft_strequ(room->name, (*room_n)[0])))
 			return (false);
 		room = room->next;
@@ -103,14 +104,14 @@ bool				valid_link(char *str, char ***links, t_room *room)
 
 int					handle_stend(char *str, char *stend)
 {
-	if ((ft_strequ(str, "##end") && gl->has_end)
-	|| (ft_strequ(str, "##start") && gl->has_start))
+	if ((ft_strequ(str, "##end") && g_gl->has_end)
+	|| (ft_strequ(str, "##start") && g_gl->has_start))
 		puterr("Error: double start / end");
-	else if (ft_strequ(str, "##start") && !(gl->has_start) && (*stend = 's')
-		&& (gl->has_start = true))
+	else if (ft_strequ(str, "##start") && !(g_gl->has_start) && (*stend = 's')
+		&& (g_gl->has_start = true))
 		return (-1);
-	else if (ft_strequ(str, "##end") && !(gl->has_end) && (*stend = 'e')
-		&& (gl->has_end = true))
+	else if (ft_strequ(str, "##end") && !(g_gl->has_end) && (*stend = 'e')
+		&& (g_gl->has_end = true))
 		return (-1);
 	else if (COMMENT(str))
 		return (-1);
