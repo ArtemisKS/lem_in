@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:57:58 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/29 00:21:17 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 04:34:35 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,18 @@ int			ant_can_go(t_global *tl, t_emmet *ant, t_room *tv)
 	return (1);
 }
 
-int			antnum_cor(char *line)
+bool			n_ants_valid(char *line, t_global *gl)
 {
 	int i;
 
-	i = 0;
-	if (!(int_value(line)))
-		return (0);
-	if (line[i] == '0')
-		return (0);
-	while (line[i])
-	{
+	i = -1;
+	if (!(is_int(line)) || line[0] == '0')
+		return (false);
+	while (line[++i])
 		if (!(ft_isdigit(line[i])))
-			return (0);
-		i++;
-	}
-	return (1);
+			return (false);
+	gl->n_ants = ft_atoi(line);
+	return (true);
 }
 
 void		null_vertex(t_room *tv)

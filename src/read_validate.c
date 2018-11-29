@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:51:22 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/29 00:23:05 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 03:59:18 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int				room_exception(char *line, int *beg, int *end, int *fl)
 	}
 	else if (((!ft_strcmp(line, "##end")) ||
 		(!ft_strcmp(line, "##start"))) && ((*end) || (*beg)))
-		ft_error(7);
+		puterr("Error: double start/end");
 	else if (line && line[0] == '#')
 		return (1);
 	if (!(ft_strlen(line)))

@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 18:36:29 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/29 00:22:35 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 03:49:36 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_path	*find_path(t_room *tv)
 	return (tw);
 }
 
-int		str_arr_remalloc(t_global *tl)
+int		realloc_darr(t_global *tl)
 {
 	static	int		iter = 1;
 	char			**printcpy;
@@ -93,22 +93,21 @@ int		str_arr_remalloc(t_global *tl)
 		if (iter != 1)
 			free(tl->map);
 		else
-			tl->it = 0;
+			tl->iter = 0;
 		tl->map = printcpy;
 		iter++;
 	}
 	return (1);
 }
 
-int		antsnum_exception(char *line)
+bool		check_n_emm(char *line, int ind)
 {
-	if (!ft_strcmp(line, "##start"))
-		ft_error(3);
-	if (!ft_strcmp(line, "##end"))
-		ft_error(3);
-	if (line && line[0] == '#')
-		return (1);
-	if (line && !(ft_strlen(line)))
-		ft_error(3);
-	return (0);
+	if (ind == 1)
+	{
+		if (ft_strequ(line, "##start"))
+			puterr("Error: ##start before number of ants");
+		else if (ft_strequ(line, "##end"))
+			puterr("Error: ##end before number of ants");
+	}
+	return (COMMENT(line) ? (false) : (true));
 }

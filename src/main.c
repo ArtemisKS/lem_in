@@ -6,35 +6,28 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/07 21:14:50 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/29 00:21:17 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 04:25:09 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
 
-int			int_value(char *line)
+bool		is_int(char *line)
 {
-	int		i;
-	char	*s;
+	int		ind;
+	char	*int_max;
 
-	i = -1;
-	s = "2147483647\0";
-	while (line[++i])
-		;
-	if (i > 10)
-		return (0);
-	else if (i == 10)
-	{
-		i = -1;
-		while (line[++i])
+	int_max = "2147483647";
+	if ((ind = ft_strlen(line)) > 10)
+		return (true);
+	if (ind == 10 && (ind == -1))
+		while (line[++ind])
 		{
-			if (line[i] > s[i])
-				return (0);
-			else if (line[i] < s[i])
-				return (1);
+			if (line[ind] == int_max[ind])
+				continue ;
+			return ((line[ind] > int_max[ind]) ? (false) : (true));
 		}
-	}
-	return (1);
+	return (true);
 }
 
 t_path		*alg_and_sth_else(t_room *tv)
@@ -65,15 +58,15 @@ t_path		*alg_and_sth_else(t_room *tv)
 	return (tw);
 }
 
-t_emmet		**ants_init(t_global *tl, t_path *tw)
+t_emmet		**ants_init(t_global *gl, t_path *tw)
 {
 	int		i;
 	t_path	*tmp;
 	t_emmet	**ant_arr;
 
 	i = 0;
-	ant_arr = (t_emmet **)malloc(sizeof(t_emmet *) * tl->n_ants);
-	while (i < tl->n_ants)
+	ant_arr = (t_emmet **)malloc(sizeof(t_emmet *) * gl->n_ants);
+	while (i < gl->n_ants)
 	{
 		ant_arr[i] = (t_emmet *)malloc(sizeof(t_emmet));
 		ant_arr[i]->room = NULL;
@@ -92,47 +85,58 @@ t_emmet		**ants_init(t_global *tl, t_path *tw)
 	return (ant_arr);
 }
 
-void		do_flags(int ac, char **av, t_global *tl)
+static inline bool		assign_flags(char opt, t_global *gl)
 {
-	int i;
+	const char			chars[5] = "acelw";
+	const char			j[2] = {opt, 0};
+	const size_t		index = ft_strstr(chars, j) - chars;
+	int					res;
 
-	i = 1;
-	while (i < ac)
-	{
-		if (!(ft_strcmp(av[i], "-c")))
-			tl->colour = 1;
-		else if (!(ft_strcmp(av[i], "-w")))
-			tl->disp_paths = 1;
-		else if (!(ft_strcmp(av[i], "-a")))
-			tl->disp_emmets = 1;
-		else if (!(ft_strcmp(av[i], "-l")))
-			tl->leaks = 1;
-		else if (!(ft_strcmp(av[i], "-e")))
-			tl->ants_home = 1;
-		i++;
-	}
+	res = 0;
+	ft_printf("%c\n", opt);
+	if (index < 5)
+		((char *)(gl))[index] = true;
+	else
+		res = ft_printf("%s%c\n%s", "./lem_in: illegal option -- ", opt,
+		"usage: ./lem_in [-acelw] < [file]\n");
+	return (res != 0);
 }
 
-int			main(int ac, char **av)
+static inline int		parse_flags(int ac, char **av, t_global *gl)
 {
-	t_global		*tl;
+	int		i;
+	int		k;
+
+	i = 0;
+	while ((++i < ac && (k = 1)) && (av[i][0] == '-' && av[i][1]))
+		while (av[i][k])
+			if (assign_flags(av[i][k++], gl))
+				exit(1);
+	return (1);
+}
+
+int						main(int ac, char **av)
+{
+	t_global	gl;
 	t_path		*tw;
-	t_room	*tv;
+	t_room		*tv;
 	t_emmet		**ant_arr;
 
-	tl = make_lemin();
-	do_flags(ac, av, tl);
-	tv = parsing(tl);
+	// if (ac > 1) write(1, av[1], ft_strlen(av[1]));
+	ft_bzero(&gl, sizeof(t_global *));
+	gl.ind = (ac > 1) ? (parse_flags(ac, av, &gl)) : 0;
+	tv = parse_validate(&gl);
 	tw = alg_and_sth_else(tv);
-	ant_arr = ants_init(tl, tw);
-	assign_ways(tl, ant_arr, tw);
-	if (tl->disp_paths)
-		print_paths(tv, tw, tl);
-	assign_rooms(tl, ant_arr, tv);
-	tl->n_ants_arr = 0;
-	while (tl->n_ants_arr < tl->n_ants)
-		make_step(tl, ant_arr, tv);
-	if (tl->leaks)
+	ant_arr = ants_init(&gl, tw);
+	assign_ways(&gl, ant_arr, tw);
+	// ft_printf("gl.disp_paths: %d\n", gl.disp_paths);
+	if (gl.disp_paths)
+		print_paths(tv, tw, &gl);
+	assign_rooms(&gl, ant_arr, tv);
+	gl.n_ants_arr = 0;
+	while (gl.n_ants_arr < gl.n_ants)
+		make_step(&gl, ant_arr, tv);
+	if (gl.leaks)
 		system("leaks -quiet lem-in");
 	return (0);
 }

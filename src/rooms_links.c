@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:54:15 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/29 00:21:17 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 04:37:00 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int				do_links(char **name, t_room *node, char *line, t_global *tl)
 		return (0);
 	}
 	else
-		ft_error(4);
+		puterr("Error: wrong room/first link");
 	return (1);
 }
 
@@ -65,9 +65,9 @@ t_room		*read_rooms(char *line, t_global *tl)
 	static int		beg = 0;
 	static int		end = 0;
 
-	while (get_next_line(tl->fd, &line) > 0 && str_arr_remalloc(tl))
+	while (get_next_line(tl->fd, &line) > 0 && realloc_darr(tl))
 	{
-		tl->map[tl->it++] = line;
+		tl->map[tl->iter++] = line;
 		if (room_exception(line, &beg, &end, &fl) == 1)
 			continue;
 		else if (!room_exception(line, &beg, &end, &fl))
@@ -112,10 +112,10 @@ void			read_links(char *line, t_global *tl, t_room *tv)
 
 	link = NULL;
 	i = 0;
-	while ((!i || get_next_line(tl->fd, &line) > 0) && str_arr_remalloc(tl))
+	while ((!i || get_next_line(tl->fd, &line) > 0) && realloc_darr(tl))
 	{
 		if (i)
-			tl->map[tl->it++] = line;
+			tl->map[tl->iter++] = line;
 		if (!(ft_strlen(line)))
 			break ;
 		else if (line && line[0] == '#')
@@ -123,7 +123,7 @@ void			read_links(char *line, t_global *tl, t_room *tv)
 		else if (line && line[0] != 'L' && link_correct(line, &link, tv))
 			form_links(tv, link);
 		else
-			ft_error(5);
+			puterr("Error: wrong link");
 		i++;
 	}
 	if (line)

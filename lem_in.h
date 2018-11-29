@@ -6,7 +6,7 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/28 23:44:45 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 00:23:45 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 04:34:15 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 # define LEM_IN_H
 
 # include <libftprintf.h>
+# include <stdint.h>
+# include <stdbool.h>
 
-# define BUFF 30000
+# define BUFF			30000
+# define COMMENT(line)	(line && line[0] == '#')
 
 typedef struct		s_room
 {
@@ -59,30 +62,30 @@ typedef struct		s_emmet
 
 typedef struct		s_global
 {
-	unsigned int	colour : 1;
-	unsigned int	disp_paths : 1;
-	unsigned int	disp_emmets : 1;
-	unsigned int	leaks : 1;
+	char			disp_emmets;
+	char			colour;
+	char			ants_home;
+	char			leaks;
+	char			disp_paths;
 	int				n_ants;
 	int				n_ants_arr;
 	int				n_path;
 	int				fd;
-	unsigned int	ants_home : 1;
-	unsigned int	it;
+	unsigned int	iter;
 	char			**map;
 	int				n_lines;
 	int				gnl_ret;
+	int				ind;
 }					t_global;
 
 t_room				*make_struct();
-t_global				*make_lemin();
 t_room				*copy_kid(t_room *tv);
-void				ft_error(int n);
+void				puterr(const char *strerr);
 void				free_arr(void **arr);
 void				assign_rooms(t_global *tl, t_emmet **ant_arr, t_room *tv);
 int					ft_min(int a, int b);
 int					ant_can_go(t_global *tl, t_emmet *ant, t_room *tv);
-int					antnum_cor(char *line);
+bool				n_ants_valid(char *line, t_global *gl);
 void				null_vertex(t_room *tv);
 int					check_links(t_room **tv, int distance, t_bfs **tq);
 void				bfs_algo(t_room **tv, int *distance, \
@@ -100,7 +103,7 @@ void				make_step(t_global *tl, t_emmet **ant_arr, t_room *tv);
 int					beg_end_present(t_room *tv);
 void				print_paths(t_room *tv, t_path *tw, t_global *tl);
 int					beg_end_connected(t_room *tv);
-t_room				*parsing(t_global *tl);
+t_room				*parse_validate(t_global *tl);
 void				print_emmet(int ant_id, t_room *room, \
 					int n_path, t_global *tl);
 void				make_step_thing(t_global *tl, t_emmet **ant_arr, \
@@ -121,10 +124,10 @@ int					assign_ways_sth(t_global *tl, t_path **tw);
 int					assign_ways_thing(t_global *tl, t_path **tw, t_path *tmp);
 void				assign_ways(t_global *tl, t_emmet **ant_arr, t_path *tw);
 t_room				*make_rooms(t_path *tw, t_room *tv);
-int					str_arr_remalloc(t_global *tl);
-int					str_arr_remalloc(t_global *tl);
+int					realloc_darr(t_global *tl);
+int					realloc_darr(t_global *tl);
 int					room_correct_3(char ***name, t_room *tv);
-int					antsnum_exception(char *line);
-int					int_value(char *line);
+bool				check_n_emm(char *line, int n);
+bool				is_int(char *line);
 
 #endif

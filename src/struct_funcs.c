@@ -6,30 +6,11 @@
 /*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 19:50:08 by akupriia          #+#    #+#             */
-/*   Updated: 2018/11/29 00:22:35 by vdzhanaz         ###   ########.fr       */
+/*   Updated: 2018/11/29 04:00:54 by vdzhanaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
-
-t_global		*make_lemin(void)
-{
-	t_global *tl;
-
-	tl = (t_global *)malloc(sizeof(t_global));
-	tl->fd = 0;
-	tl->n_ants = 0;
-	tl->n_path = 0;
-	tl->n_ants_arr = 0;
-	tl->colour = 0;
-	tl->disp_paths = 0;
-	tl->disp_emmets = 0;
-	tl->leaks = 0;
-	tl->ants_home = 0;
-	tl->n_lines = 0;
-	tl->gnl_ret = 0;
-	return (tl);
-}
 
 t_room	*make_struct(void)
 {
@@ -74,28 +55,29 @@ t_room	*copy_kid(t_room *tv)
 	return (res);
 }
 
-void		ft_error(int n)
+void		puterr(const char *strerr)
 {
-	if (n == 1)
-		ft_putendl_fd("ANTS NUM ERROR", 2);
-	else if (n == 3)
-		ft_putendl_fd("beg OR END BEFORE ANTS ERROR", 2);
-	else if (n == 4)
-		ft_putendl_fd("WRONG ROOM OR FIRST LINK ERROR", 2);
-	else if (n == 5)
-		ft_putendl_fd("WRONG LINK ERROR", 2);
-	else if (n == 6)
-		ft_putendl_fd("WRONG ROOM ERROR", 2);
-	else if (n == 7)
-		ft_putendl_fd("START OR END ERROR", 2);
-	else if (n == 8)
-		ft_putendl_fd("NO START OR END OR NO POSSIBLE WAY ERROR", 2);
-	else if (n == 9)
-		ft_putendl_fd("WRONG FIRST ROOM ERROR", 2);
-	else if (n == 2)
-		ft_putendl_fd("STDIN ERROR", 2);
-	else
-		ft_putendl_fd("ERROR", 2);
+	ft_putendl_fd(strerr, 2);
+	// if (n == 1)
+	// 	ft_putendl_fd("ANTS NUM ERROR", 2);
+	// else if (n == 3)
+	// 	ft_putendl_fd("START OR END BEFORE ANTS ERROR", 2);
+	// else if (n == 4)
+	// 	ft_putendl_fd("WRONG ROOM OR FIRST LINK ERROR", 2);
+	// else if (n == 5)
+	// 	ft_putendl_fd("WRONG LINK ERROR", 2);
+	// else if (n == 6)
+	// 	ft_putendl_fd("WRONG ROOM ERROR", 2);
+	// else if (n == 7)
+	// 	ft_putendl_fd("START OR END ERROR", 2);
+	// else if (n == 8)
+	// 	ft_putendl_fd("NO START OR END OR NO POSSIBLE WAY ERROR", 2);
+	// else if (n == 9)
+	// 	ft_putendl_fd("WRONG FIRST ROOM ERROR", 2);
+	// else if (n == 2)
+	// 	ft_putendl_fd("STDIN ERROR", 2);
+	// else
+	// 	ft_putendl_fd("ERROR", 2);
 	exit(1);
 }
 
