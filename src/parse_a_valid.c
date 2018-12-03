@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_a_valid.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 16:10:18 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 16:41:32 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/12/03 03:25:39 by akupriia          #+#    #+#             */
+/*   Updated: 2018/12/03 03:25:41 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lem_in.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 15:35:29 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 17:18:53 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/12/03 03:25:25 by akupriia          #+#    #+#             */
+/*   Updated: 2018/12/03 04:30:33 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ static t_room			*make_rooms(t_path *path, t_room *room)
 	t_room		*way;
 
 	node = room;
+	while (room->status != 's')
+		room = room->next;
 	res = link_cpy(room);
 	i = path->distance - 1;
 	while (--i >= 0)

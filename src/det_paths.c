@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   det_paths.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 16:12:50 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 16:34:58 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/12/03 03:25:15 by akupriia          #+#    #+#             */
+/*   Updated: 2018/12/03 04:19:01 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ bool			stend_connected(t_room *room)
 	t_room *node;
 
 	node = room;
-	while (room && room->beg != 'e')
+	while (room && room->status != 'e')
 		room = room->next;
 	if (!(room->distance))
 	{
 		room = node;
 		br_first_search(room);
-		while (room && room->beg != 'e')
+		while (room && room->status != 'e')
 			room = room->next;
 		if (room->distance)
 			return (true);
@@ -81,9 +81,10 @@ void			det_paths(t_emmet **ant_arr, t_path *path)
 	i = -1;
 	while (++i < g_gl->n_ants)
 	{
-		while (path)
-			if (!det_paths_algo(&path, way))
-				break ;
+		if (path->next)
+			while (path)
+				if (!det_paths_algo(&path, way))
+					break ;
 		ant_arr[i]->path = path;
 		path->n_ants++;
 		g_gl->n_ants_arr++;

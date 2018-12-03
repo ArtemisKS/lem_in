@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extra_funcs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 15:48:38 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 16:29:52 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/12/03 03:25:20 by akupriia          #+#    #+#             */
+/*   Updated: 2018/12/03 04:46:38 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ t_path					*run_path_search(t_room *room)
 	{
 		tmp = det_way(room);
 		tmp->n_path = ind + 1;
+		g_gl->n_path++;
 		if (!ind)
 			path = tmp;
 		else
@@ -60,9 +61,6 @@ t_path					*run_path_search(t_room *room)
 		tmp = tmp->next;
 		ind++;
 	}
-	while (room->beg != 's')
-		room = room->next;
-	room->occupied = 1;
 	return (path);
 }
 

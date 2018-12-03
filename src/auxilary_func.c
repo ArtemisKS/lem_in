@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   auxilary_func.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 08:58:40 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 16:19:38 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/12/03 03:24:59 by akupriia          #+#    #+#             */
+/*   Updated: 2018/12/03 03:25:00 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

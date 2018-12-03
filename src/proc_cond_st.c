@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   proc_cond_st.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 15:38:58 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 16:50:50 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/12/03 03:25:54 by akupriia          #+#    #+#             */
+/*   Updated: 2018/12/03 04:48:49 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void			cond_one_st(t_emmet **ant_arr, t_room *room)
 	ant_id = -1;
 	node = room;
 	while (++ant_id < g_gl->n_ants && emm_may_move(ant_arr[ant_id], room))
-		if ((ant_arr[ant_id]->room)->beg != 'e')
+		if ((ant_arr[ant_id]->room)->status != 'e')
 		{
 			cond_one_st_thing(ant_arr, room, ant_id);
 			do_emm_printing(ant_arr, ant_id);
@@ -32,25 +32,24 @@ void			cond_one_st(t_emmet **ant_arr, t_room *room)
 bool			stend_valid(t_room *room)
 {
 	t_room		*node;
-	static bool	res = true;
 
 	node = room;
-	while (node->next && node->beg != 's')
+	while (node->next && node->status != 's')
 		node = node->next;
-	if (!node->links[0] || (!(node->next) && node->beg != 's'))
-		res = false;
+	if (!node->links[0] || (!(node->next) && node->status != 's'))
+		return (false);
 	node = room;
-	while (node->next && node->beg != 'e')
+	while (node->next && node->status != 'e')
 		node = node->next;
-	if (!node->links[0] || (!(node->next) && node->beg != 'e'))
-		res = false;
+	if (!node->links[0] || (!(node->next) && node->status != 'e'))
+		return (false);
 	node = room;
 	br_first_search(room);
-	while (node->beg != 'e')
+	while (node->status != 'e')
 		node = node->next;
 	if (!(node->distance))
-		res = false;
-	return (res);
+		return (false);
+	return (true);
 }
 
 void			print_paths(t_room *room, t_path *path)
@@ -87,9 +86,9 @@ bool			st_end_nearby(t_room *room)
 	bool	res;
 
 	res = false;
-	while (room && room->beg != 'e')
+	while (room && room->status != 'e')
 		room = room->next;
-	if (room && room->father && (room->father)->beg == 's')
+	if (room && room->father && (room->father)->status == 's')
 		res = true;
 	return (res);
 }

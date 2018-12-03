@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_rms_lnks.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 16:15:57 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 17:16:13 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/12/03 03:25:47 by akupriia          #+#    #+#             */
+/*   Updated: 2018/12/03 04:47:12 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,22 @@ t_room				*parse_val_rooms(char *str)
 	static t_room	*node = NULL;
 	char			**room_n;
 	int				hstend;
+	int				gnl;
 
-	while (get_next_line(g_gl->fd, &str) > 0 && realloc_darr())
+	while ((gnl = get_next_line(g_gl->fd, &str)) > 0 && realloc_darr())
 	{
 		g_gl->map[g_gl->iter++] = str;
 		if ((hstend = handle_stend(str, &stend)) == -1)
 			continue ;
 		else if (!hstend)
-			break ;
+			return (NULL);
 		if (valid_room(str, &room_n, node))
 			node = add_room(room_n, node, stend);
 		else if (!parse_links(room_n, node, str))
 			break ;
 		stend = 0;
 	}
+	(gnl <= 0) ? puterr("Error: links are absent") : 1;
 	return (node);
 }
 

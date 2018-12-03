@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_al_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 16:07:04 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 16:34:28 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/12/03 03:25:34 by akupriia          #+#    #+#             */
+/*   Updated: 2018/12/03 04:19:01 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static bool				fill_queue(t_room *room, int distance, t_bfs **queue)
 	int i;
 
 	i = -1;
-	while (room->beg != 's')
+	while (room->status != 's')
 		room = room->next;
 	while (room->links[++i])
 		if (!room->links[i]->used)

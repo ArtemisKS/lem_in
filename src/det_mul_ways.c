@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   det_mul_ways.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 16:14:58 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 16:25:28 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/12/03 03:25:10 by akupriia          #+#    #+#             */
+/*   Updated: 2018/12/03 04:48:53 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_path				*det_way(t_room *room)
 	path = ft_memalloc(sizeof(t_path));
 	calibrate_dist(room);
 	node = room;
-	while (room && room->beg != 'e')
+	while (room && room->status != 'e')
 		room = room->next;
 	path->path = ft_memalloc(sizeof(int) * room->distance);
 	path->distance = room->distance;
@@ -74,9 +74,9 @@ bool				emm_may_move(t_emmet *ant, t_room *room)
 	i = 0;
 	while ((ant->room)->next && ((ant->room)->next)->id != room->id)
 		room = room->next;
-	if (ant->id < g_gl->n_ants && (ant->room)->beg == 'e')
+	if (ant->id < g_gl->n_ants && (ant->room)->status == 'e')
 		return (true);
-	if ((!(ant->room)->next && (ant->room)->beg == 'e'
+	if ((!(ant->room)->next && (ant->room)->status == 'e'
 		&& ant->id == g_gl->n_ants) || room->occupied)
 		return (false);
 	return (true);

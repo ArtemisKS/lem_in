@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lem_in.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vdzhanaz <vdzhanaz@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: akupriia <akupriia@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 15:39:04 by vdzhanaz          #+#    #+#             */
-/*   Updated: 2018/11/29 17:17:46 by vdzhanaz         ###   ########.fr       */
+/*   Created: 2018/12/03 03:26:05 by akupriia          #+#    #+#             */
+/*   Updated: 2018/12/03 04:50:21 by akupriia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 
-# define BUFF				10
+# define BUFF				100000
 # define COMMENT(line)		(line && line[0] == '#')
 # define N_LETTER_L(line)	(line && line[0] != 'L')
 # define CYAN				"\033[0;36m"
@@ -41,7 +41,7 @@ typedef struct		s_room
 	unsigned int	marked : 1;
 	unsigned int	occupied : 1;
 	unsigned int	used : 1;
-	char			beg;
+	char			status;
 	int				distance;
 	int				id;
 	int				n_links;
